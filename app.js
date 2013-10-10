@@ -1,7 +1,7 @@
 var img = document.querySelector('#source_image');
 var canvas = document.querySelector('#screen');
 
-img.onload = function() {
+function doStuff() {
   var analogue = new Analogue(canvas, img);
   analogue.drawImage();
   
@@ -17,5 +17,14 @@ img.onload = function() {
   analogue.tint(-10, -10, 20);
   analogue.scanlines(-30, 2);
   analogue.colourBanding(0.02, 30);
+
+  analogue.contrast(-80);
+  analogue.brightness(30);
   */
+
+  analogue.leds();
+  //analogue.scanlines(-30, 2);
+  
 }
+
+setTimeout(doStuff, 100);

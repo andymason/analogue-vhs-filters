@@ -212,6 +212,48 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
 		var imgData = _upScale(_getImageData(canvas), factor);
     if (imgData) { ctx.putImageData(imgData, 0, 0); }
 	}
+  
+  
+  function leds() {
+    
+    
+    var borderWidth = 1;
+    var borderOffset = borderWidth / 2;
+    var ledWidth = 4;
+    var ledHeight = 6;
+    var ledColCount = Math.ceil(width / ledWidth);
+    var ledRowCount =height//Math.ceil(height / ledHeight);
+    
+    
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.lineWidth = borderWidth;
+    
+    for (var row = 0; row < ledRowCount; row++) {
+      for (var i = 0; i < ledColCount; i++) {
+          //ctx.strokeRect(ledWidth * i, ledHeight * row, ledWidth * (i + 1), ledHeight * (row + 1));
+          ctx.beginPath();
+          //ctx.moveTo((ledWidth * i) + borderOffset, (ledHeight * row) + borderOffset);
+          //ctx.lineTo((ledWidth * i) + borderOffset, (ledHeight * (row + 1)) + borderOffset);
+          //ctx.moveTo((ledWidth * i) + borderOffset, (ledHeight * (row + 1)));
+          //ctx.lineTo((ledWidth * (i + 1)) + borderOffset, (ledHeight * (row + 1)));
+          
+          var vertOffset = 0;
+          if ( i % 2 === 0) {
+            vertOffset = Math.floor(ledHeight / 2);
+          }
+          
+          ctx.moveTo((ledWidth * i) + borderOffset, (ledHeight * row) + borderOffset + vertOffset);
+          ctx.lineTo((ledWidth * i) + borderOffset, (ledHeight * (row + 1)) + borderOffset + vertOffset);
+          
+          ctx.moveTo((ledWidth * i) + borderOffset, (ledHeight * (row + 1)) + borderOffset + vertOffset);
+          ctx.lineTo((ledWidth * (i + 1)) + borderOffset, (ledHeight * (row + 1)) + borderOffset + vertOffset);
+          
+          ctx.closePath();
+          ctx.stroke();
+      }
+    }
+    
+  }
 
 
   function drawImage() {
@@ -229,6 +271,7 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     scanlines: scanlines,
     colourBanding: colourBanding,
 		upScale: upScale,
+    leds: leds,
     drawImage: drawImage
   }
 };
