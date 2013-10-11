@@ -1,4 +1,4 @@
 var connect = require('connect');
-connect.createServer(
-    connect.static(__dirname)
-).listen(8080);
+console.log('Connected to localhost:8180');
+var app = connect().use(connect.static(__dirname));
+app.listen(8180);

@@ -1,0 +1,33 @@
+{
+  "name": "analogue-vhs-filters",
+  "description": "",
+  "version": "0.0.1",
+  "homepage": "https://github.com/andymason/analogue-vhs-filters",
+  "keywords": [
+    "vhs",
+    "filters",
+    "glitch"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:andymason/analogue-vhs-filters.git"
+  },
+  "author": {
+    "name": "Andrew Mason",
+    "email": "andrew@coderonfire.com",
+    "url": "http://coderonfire.com/"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": ""
+    }
+  ],
+  "engines": {
+    "node": ">= 0.6.x"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "connect": "~2.1.3"
+  }
+}

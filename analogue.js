@@ -203,56 +203,87 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     var imgData = _colourBanding(_getImageData(canvas), amount, bandCount);
     ctx.putImageData(imgData, 0, 0);
   }
-	
+
 	function _upScale(imgData, factor) {
-	
+
 	}
-	
+
 	function upScale(factor) {
 		var imgData = _upScale(_getImageData(canvas), factor);
     if (imgData) { ctx.putImageData(imgData, 0, 0); }
 	}
-  
-  
-  function leds() {
-    
-    
-    var borderWidth = 1;
-    var borderOffset = borderWidth / 2;
-    var ledWidth = 4;
-    var ledHeight = 6;
+
+
+  function leds(ledWidth, borderWidth, borderOpacity, fuzzyLines, rgbCells) {
+    var borderWidth = borderWidth || 1;
+    var borderOffset = (fuzzyLines) ? 0 : borderWidth / 2;
+    var ledWidth = ledWidth || 4;
+    var ledHeight = Math.ceil(ledWidth * 1.3);
     var ledColCount = Math.ceil(width / ledWidth);
-    var ledRowCount =height//Math.ceil(height / ledHeight);
-    
-    
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+    var ledRowCount = Math.ceil(height / ledHeight);
+
+
+    ctx.strokeStyle = 'rgba(0, 0, 0, ' + (borderOpacity || 0.8) + ')';
     ctx.lineWidth = borderWidth;
-    
-    for (var row = 0; row < ledRowCount; row++) {
+
+    for (var row = -1; row < ledRowCount; row++) {
       for (var i = 0; i < ledColCount; i++) {
           //ctx.strokeRect(ledWidth * i, ledHeight * row, ledWidth * (i + 1), ledHeight * (row + 1));
-          ctx.beginPath();
+
           //ctx.moveTo((ledWidth * i) + borderOffset, (ledHeight * row) + borderOffset);
           //ctx.lineTo((ledWidth * i) + borderOffset, (ledHeight * (row + 1)) + borderOffset);
           //ctx.moveTo((ledWidth * i) + borderOffset, (ledHeight * (row + 1)));
           //ctx.lineTo((ledWidth * (i + 1)) + borderOffset, (ledHeight * (row + 1)));
-          
+
           var vertOffset = 0;
           if ( i % 2 === 0) {
             vertOffset = Math.floor(ledHeight / 2);
           }
-          
+
+
+        if (rgbCells) {
+          var ledInnerWidth = ledWidth - borderWidth;
+          //var ledCellWidth = Math.round(ledInnerWidth / 3);
+          var ledCellWidth = ledInnerWidth / 3;
+
+
+          ctx.globalCompositeOperation = 'lighter';
+
+          for (var c = 0; c < 3; c++) {
+
+            if (c === 0) { ctx.fillStyle = 'rgba(255, 0, 0, ' + (borderOpacity || 0.8) + ')'; }
+            else if (c === 1) { ctx.fillStyle = 'rgba(0, 255, 0, ' + (borderOpacity || 0.8) + ')'; }
+            else if (c === 2) { ctx.fillStyle = 'rgba(0, 0, 255, ' + (borderOpacity || 0.8) + ')'; }
+
+
+//            var xpos = Math.round((ledWidth * i) + (borderWidth/2) + ledCellWidth * c + borderOffset/2);
+//            var ypos = Math.round((ledHeight * row) + vertOffset + (borderWidth/2) + borderOffset/2);
+            var xpos = (ledWidth * i) + (borderWidth/2) + ledCellWidth * c + borderOffset/2;
+            var ypos = (ledHeight * row) + vertOffset + (borderWidth/2) + borderOffset/2;
+
+            ctx.fillRect(
+              xpos,
+              ypos,
+              ledCellWidth,
+              ledHeight
+            );
+          }
+
+          ctx.globalCompositeOperation = 'source-over';
+        }
+
+        ctx.beginPath();
           ctx.moveTo((ledWidth * i) + borderOffset, (ledHeight * row) + borderOffset + vertOffset);
           ctx.lineTo((ledWidth * i) + borderOffset, (ledHeight * (row + 1)) + borderOffset + vertOffset);
-          
+
           ctx.moveTo((ledWidth * i) + borderOffset, (ledHeight * (row + 1)) + borderOffset + vertOffset);
           ctx.lineTo((ledWidth * (i + 1)) + borderOffset, (ledHeight * (row + 1)) + borderOffset + vertOffset);
-          
+
           ctx.closePath();
           ctx.stroke();
       }
     }
-    
+
   }
 
 
