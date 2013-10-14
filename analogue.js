@@ -205,7 +205,13 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
   }
 
 	function _upScale(imgData, factor) {
-
+    var xScale = width / factor;
+    var yScale = height / factor;
+    sandboxCtx.clearRect(0, 0, width, height);
+    sandboxCtx.putImageData(imgData, 0, 0);
+    sandboxCtx.drawImage(sandboxCanvas, 0, 0, xScale, yScale);
+    sandboxCtx.drawImage(sandboxCanvas, 0, 0, xScale, yScale, 0, 0, width, height);
+    return sandboxCtx.getImageData(0, 0, width, height);
 	}
 
 	function upScale(factor) {
@@ -218,7 +224,7 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     var borderWidth = borderWidth || 1;
     var borderOffset = (fuzzyLines) ? 0 : borderWidth / 2;
     var ledWidth = ledWidth || 4;
-    var ledHeight = Math.ceil(ledWidth * 1.3);
+    var ledHeight = Math.ceil(ledWidth * 1.2);
     var ledColCount = Math.ceil(width / ledWidth);
     var ledRowCount = Math.ceil(height / ledHeight);
 
