@@ -21,13 +21,15 @@ function doStuff() {
   analogue.contrast(-80);
   analogue.brightness(30);
   */
+  
+  
   analogue.saturation(-0.4);
 
 
   analogue.text('Analogue/VHS Filters');
   analogue.stutter(0.3);
 
-
+ analogue.rgbShift(0.13, true);
   analogue.ghost(10, 0, 0.3, true);
   analogue.vignette(0.2);
 
@@ -51,12 +53,16 @@ function doStuff() {
   analogue.contrast(80);
   analogue.tint(-20, -5, 10);
   analogue.brightnessLines(0.2, 50, 120);
+  
+  
+ 
+  
 
 
 
 
 
-  analogue.leds(2, 1, 0.1, false, true);
+  //analogue.leds(2, 1, 0.1, false, true);
 
 //  var canvasFX = fx.canvas();
 //  var texture = canvasFX.texture(canvas);
