@@ -292,6 +292,76 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
 
   }
 
+  function brightnessLines(alpha, yPos, height) {
+    var barAlpha = alpha || 0.5;
+    var barYPos = yPos || 200;
+    var barHeight = height || 100;
+
+    ctx.globalCompositeOperation = 'lighter';
+
+    var linGrad = ctx.createLinearGradient(width/2, barYPos, width/2, barYPos + barHeight);
+    linGrad.addColorStop(0, 'rgba(255, 255, 255, 0)');
+    linGrad.addColorStop(0.07, 'rgba(255, 255, 255, ' + alpha + ')');
+    linGrad.addColorStop(0.93, 'rgba(255, 255, 255, ' + alpha + ')');
+    linGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+    ctx.fillStyle = linGrad;
+    ctx.fillRect(0, barYPos, width, barYPos + barHeight);
+
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+
+  function _stutter(imgData, glitchAmount) {
+    var stutterAmount = 10 * glitchAmount;
+    var data = imgData.data;
+    for (var i = 0; i < height; i++) {
+      var colourShift = Math.round(stutterAmount * Math.random());
+      for (var k = 0; k < width; k++) {
+        var index = ((i * width) + k) * 4;
+        data[index] = data[index + 4 * colourShift];
+        data[index + 1] = data[index + 1 + 4 * colourShift];
+        data[index + 2] = data[index + 2 + 4 * colourShift];
+      }
+    }
+    return imgData;
+  }
+
+
+  function stutter(amount) {
+    var imgData = _stutter(_getImageData(canvas), amount);
+    ctx.putImageData(imgData, 0, 0);
+  }
+
+
+  function vignette(alpha) {
+    var vignetteAlpha = alpha || 1;
+    ctx.globalCompositeOperation = 'darker';
+
+    // create radial gradient
+    var grd = ctx.createRadialGradient(width/2, height/2, height/2, width/2, height/2, height);
+    grd.addColorStop(0, 'rgba(0, 0, 0, 0');
+    grd.addColorStop(1, 'rgba(0, 0, 0, ' + vignetteAlpha + ')');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, width, height);
+
+
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+
+  function text(msg, x, y) {
+    var textMsg = msg || 'Hello';
+    ctx.globalCompositeOperation = 'lighter';
+
+    ctx.font=" bold 50px Arial";
+    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+    ctx.fillText(textMsg, 50, 50);
+
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+
 
   function drawImage() {
     ctx.drawImage(img, 0, 0, width, height);
@@ -309,6 +379,10 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     colourBanding: colourBanding,
 		upScale: upScale,
     leds: leds,
+    brightnessLines: brightnessLines,
+    stutter: stutter,
+    vignette: vignette,
+    text: text,
     drawImage: drawImage
   }
 };

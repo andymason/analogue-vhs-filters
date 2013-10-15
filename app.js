@@ -21,9 +21,16 @@ function doStuff() {
   analogue.contrast(-80);
   analogue.brightness(30);
   */
-  //analogue.saturation(-0.6);
+  analogue.saturation(-0.4);
+
+
+  analogue.text('Analogue/VHS Filters');
+  analogue.stutter(0.3);
+
 
   analogue.ghost(10, 0, 0.3, true);
+  analogue.vignette(0.2);
+
   analogue.noise(2);
   analogue.brightness(-40);
   analogue.contrast(60);
@@ -31,18 +38,30 @@ function doStuff() {
   analogue.colourBanding(0.02, 30);
   analogue.upScale(2);
   analogue.saturation(-0.2);
-  analogue.leds(3, 1, 0.1, true, true);
+
+
+
+
+
+
+
+
+
   analogue.brightness(-50);
   analogue.contrast(80);
-  //analogue.tint(-20, -5, 10);
-
-  var canvasFX = fx.canvas();
-  var texture = canvasFX.texture(canvas);
+  analogue.tint(-20, -5, 10);
+  analogue.brightnessLines(0.2, 50, 120);
 
 
-  canvasFX.draw(texture).perspective([175,156,496,55,161,279,504,330], [137,122,561,46,130,306,561,363]).tiltShift(215, 442.25, 215, 40.390625, 10, 150).update();
 
-  document.body.appendChild(canvasFX);
+
+
+  analogue.leds(2, 1, 0.1, false, true);
+
+//  var canvasFX = fx.canvas();
+//  var texture = canvasFX.texture(canvas);
+//  canvasFX.draw(texture).perspective([175,156,496,55,161,279,504,330], [137,122,561,46,130,306,561,363]).tiltShift(215, 442.25, 215, 40.390625, 10, 150).update();
+//  document.body.appendChild(canvasFX);
 
 
 }
