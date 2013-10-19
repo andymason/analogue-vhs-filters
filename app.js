@@ -1,68 +1,48 @@
 var img = document.querySelector('#source_image');
 var canvas = document.querySelector('#screen');
+//canvas.height = window.innerHeight;
+//canvas.width = window.innerWidth;
 
 function doStuff() {
   var analogue = new Analogue(canvas, img);
   analogue.drawImage();
+  analogue.border(10);
 
-  /*
-  analogue.ghost(10, 0, 0.3, true);
-  //analogue.saturation(-0.6);
-	analogue.noise(1);
-  //analogue.greyscale();
-  //analogue.ghost(5, 0, 0.2, true);
-	analogue.upScale(2);
-  analogue.brightness(-40);
-  analogue.contrast(100);
-  analogue.tint(-10, -10, 20);
-  analogue.scanlines(-30, 2);
+  analogue.saturation(-0.3);
+  analogue.noise(10, true);
+  analogue.text('Analogue/VHS Filters', 50, 60, 40);
+  analogue.stutter(0.2);
+  analogue.bend(10, 1, 0, 50);
 
+  analogue.rgbShift(0.13, true);
 
-  analogue.contrast(-80);
-  analogue.brightness(30);
-  */
-  
-  
-  analogue.saturation(-0.4);
+  analogue.ghost(40, 0, 0.15, false);
+  analogue.ghost(30, 0, 0.3, true);
+  //analogue.ghost(60, 0, 0.3, false);
+  analogue.vignette(0.7, 0.1);
 
 
-  analogue.text('Analogue/VHS Filters');
-  analogue.stutter(0.3);
 
- analogue.rgbShift(0.13, true);
-  analogue.ghost(10, 0, 0.3, true);
-  analogue.vignette(0.2);
+  analogue.brightness(-60);
+  analogue.contrast(40);
 
-  analogue.noise(2);
-  analogue.brightness(-40);
-  analogue.contrast(60);
+  analogue.scanlines();
   //analogue.tint(-30, -10, 20);
-  analogue.colourBanding(0.02, 30);
-  analogue.upScale(2);
-  analogue.saturation(-0.2);
-
-
-
-
-
-
-
-
-
-  analogue.brightness(-50);
-  analogue.contrast(80);
+  analogue.colourBanding(0.03, 30);
+  analogue.upScale(2.5);
+  //analogue.saturation(-0.2);
+//
+//
+//  analogue.brightness(-50);
+//  analogue.contrast(80);
   analogue.tint(-20, -5, 10);
-  analogue.brightnessLines(0.2, 50, 120);
-  
-  
- 
-  
+  analogue.brightnessLines(0.1, 50, 120);
 
 
 
 
-
-  //analogue.leds(2, 1, 0.1, false, true);
+  // Far too slow. Replace with image data manipulation.
+  //analogue.leds(4, 2, 0.1, false, true);
 
 //  var canvasFX = fx.canvas();
 //  var texture = canvasFX.texture(canvas);
