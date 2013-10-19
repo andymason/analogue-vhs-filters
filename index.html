@@ -4,12 +4,32 @@
     body {
       background: #000;
     }
+    .container {
+      position: relative;
+      width: 640px;
+      height: 480px;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
+    <div class="container">
+      <canvas id="screen" width="640" height="480"></canvas>
+      <canvas id="screen2" width="640" height="480"></canvas>
+    </div>
+    
+    <img src="workbench.png" id="source_image" width="640">
 
-    <canvas id="screen" width="640" height="480"></canvas>
-    <img src="test.jpg" id="source_image" width="640">
+    <img src="ghosting_ref.jpg">
 
     <script src="analogue.js"></script>
     <script src="app.js"></script>

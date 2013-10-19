@@ -7,8 +7,10 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
   var canvas = srcCanvas;
   var img = srcImg;
   var ctx = canvas.getContext('2d');
-  var width = canvas.width;
-  var height = canvas.height;
+  var width = parseInt(canvas.width, 10);
+  var height = parseInt(canvas.height, 10);
+
+  console.log(width, height)
 
   var sandboxCanvas = document.createElement('canvas');
   var sandboxCtx = sandboxCanvas.getContext('2d');
@@ -26,8 +28,46 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     }
 
     sandboxCtx.clearRect(0, 0, width, height);
+
+    imgData = _saturation(imgData, -0.4);
+    imgData = _brightness(imgData, -90);
+    imgData = _contrast(imgData, 90)
+
+
+//    source-over
+//    source-atop
+//    destination-over
+//    destination-out
+//    lighter
+//    xor
+
+
+    ctx.globalCompositeOperation = 'lighter';
+
     sandboxCtx.putImageData(imgData, 0, 0);
     ctx.drawImage(sandboxCanvas, xShift, yShift);
+
+    if (xShift > 0 || xShift < 0) {
+      var offset =(xShift > 0) ? xShift - width : xShift + width;
+      ctx.drawImage(sandboxCanvas, offset,  yShift);
+    }
+
+    if (yShift > 0 || yShift < 0) {
+      var offset =(yShift > 0) ? yShift - height : yShift + height;
+      ctx.drawImage(sandboxCanvas, xShift,  offset);
+    }
+
+    if ((xShift > 0 || xShift < 0) && (yShift > 0 || yShift < 0)) {
+      var xOffset =(xShift > 0) ? xShift - width : xShift + width;
+      var yOffset =(yShift > 0) ? yShift - height : yShift + height;
+      ctx.drawImage(sandboxCanvas, xOffset,  yOffset);
+    }
+
+
+
+
+    ctx.globalCompositeOperation = 'source-over';
+
   }
 
   function _getImageData(img) {
@@ -132,45 +172,63 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
 
   function _saturation(imgData, saturationVal) {
     var data = imgData.data;
-    for (var i = 0; i < data.length; i += 4) {
+
+    for (var i = 0; i < data.length; i+=4) {
       var meanVal = +((data[i] + data[i + 1] + data[i + 2]) / 3);
       data[i] = data[i] + ((data[i] - meanVal) * saturationVal);
       data[i + 1] = data[i + 1] + ((data[i + 1] - meanVal) * saturationVal);
       data[i + 2] = data[i + 2] + ((data[i + 2] - meanVal) * saturationVal);
+
     }
+
     return imgData;
   }
 
   function saturation(saturationVal) {
+    console.time('filter');
     var imgData = _saturation(_getImageData(canvas), saturationVal);
+    console.timeEnd('filter');
     ctx.putImageData(imgData, 0, 0);
   }
 
-  function _noise(imgData, noiseAmount) {
+  function _noise(imgData, noiseAmount, colour) {
     var data = imgData.data;
+    var randColour;
+
     for (var i = 0; i < data.length; i += 4) {
       var multiplier = (Math.random() > 0.5) ? -1 : 1;
-      data[i] = _truncate(data[i] + noiseAmount * multiplier);
-      data[i + 1] = _truncate(data[i + 1] + noiseAmount * multiplier);
-      data[i + 2] = _truncate(data[i + 2] + noiseAmount * multiplier);
+      if (colour) {
+        randColour = Math.round((Math.random() * 2));
+        data[i] = _truncate( (randColour === 0) ? (data[i] + noiseAmount ) : (data[i] - noiseAmount ) );
+        data[i + 1] = _truncate( (randColour === 1) ? (data[i + 1] + noiseAmount ) :(data[i+1] - noiseAmount ) );
+        data[i + 2] = _truncate( (randColour === 2) ? (data[i + 2] + noiseAmount ) : (data[i+2] - noiseAmount ) )
+
+      } else {
+        data[i] = _truncate( data[i] + noiseAmount * multiplier );
+        data[i + 1] = _truncate( data[i + 1] + noiseAmount * multiplier );
+        data[i + 2] = _truncate( data[i + 2] + noiseAmount * multiplier );
+
+      }
     }
     return imgData;
   }
 
-  function noise(noiseAmount) {
-    var imgData = _noise(_getImageData(canvas), noiseAmount);
+  function noise(noiseAmount, colour) {
+    var imgData = _noise(_getImageData(canvas), noiseAmount, colour);
     ctx.putImageData(imgData, 0, 0);
   }
 
   function _scanlines(imgData, amount, spacing) {
+    var brightness = amount || 10;
+    var lineSpacing = spacing || 3;
     var data = imgData.data;
     for (var row = 0; row < height; row++) {
-      if (row % spacing !== 0) continue;
+      if (row % lineSpacing !== 0) continue;
       for (var col = 0; col < width; col++) {
           var i = (col + (row * width)) * 4;
-          data[i] = _truncate(data[i] + amount);
-          data[i + 1] = _truncate(data[i + 1] + amount);
-          data[i + 2] = _truncate(data[i + 2] + amount);
+          data[i] = _truncate(data[i] + brightness);
+          data[i + 1] = _truncate(data[i + 1] + brightness);
+          data[i + 2] = _truncate(data[i + 2] + brightness);
       }
     }
     return imgData;
@@ -334,12 +392,13 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
   }
 
 
-  function vignette(alpha) {
+  function vignette(alpha, size) {
+    var radius = (size) ? height/ (1 + size) : height;
     var vignetteAlpha = alpha || 1;
     ctx.globalCompositeOperation = 'darker';
 
     // create radial gradient
-    var grd = ctx.createRadialGradient(width/2, height/2, height/2, width/2, height/2, height);
+    var grd = ctx.createRadialGradient(width/2, height/2, height/2, width/2, height/2, radius);
     grd.addColorStop(0, 'rgba(0, 0, 0, 0');
     grd.addColorStop(1, 'rgba(0, 0, 0, ' + vignetteAlpha + ')');
     ctx.fillStyle = grd;
@@ -350,13 +409,16 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
   }
 
 
-  function text(msg, x, y) {
+  function text(msg, x, y, size) {
+    var xPos = x || 10;
+    var yPos =  y|| 10;
+    var fontSize = size || 10;
     var textMsg = msg || 'Hello';
     ctx.globalCompositeOperation = 'lighter';
 
-    ctx.font=" bold 50px Arial";
+    ctx.font = 'bold ' + fontSize + 'px Arial';
     ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
-    ctx.fillText(textMsg, 50, 50);
+    ctx.fillText(textMsg, xPos, yPos);
 
     ctx.globalCompositeOperation = 'source-over';
   }
@@ -379,11 +441,54 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     }
     return imgData;
   }
-  
-  
+
+
   function rgbShift(distance, interlaced) {
     var imgData = _rgbShift(_getImageData(canvas), distance, interlaced);
     ctx.putImageData(imgData, 0, 0);
+  }
+
+  function _bend(imgData, amount, freq, x, y) {
+    var data = imgData.data;
+    var frequency =  (height/ Math.PI) / (freq || 1);
+    var amp = amount || 100;
+    var xOffset = (x || 0) * 4;
+    var yOffset = (y || 0);
+
+    for (var i = 0; i < height; i++) {
+      var colourShift = Math.round(Math.sin((i + yOffset) / frequency) * amp);
+      colourShift *= (colourShift < 0) ? -1 : 1;
+
+      for (var k = 0; k < width; k++) {
+        var index = ((i * width) + k) * 4;
+        data[index] = data[(index + 4 * colourShift) + xOffset];
+        data[index + 1] = data[(index + 1 + 4 * colourShift) + xOffset];
+        data[index + 2] = data[(index + 2 + 4 * colourShift) + xOffset];
+      }
+  }
+    return imgData;
+  }
+
+  function bend(amount, freq, x, y) {
+    var imgData = _bend(_getImageData(canvas), amount, freq, x, y);
+    ctx.putImageData(imgData, 0, 0);
+  }
+
+  function border(thickness, color) {
+    var borderWidth = thickness || 2;
+
+    ctx.strokeStyle = color || 'rgba(0, 0, 0, 0.3)';
+    ctx.lineWidth = borderWidth + 3;
+    ctx.beginPath();
+    ctx.strokeRect(0, 0, width, height);
+    ctx.closePath();
+
+
+    ctx.strokeStyle = color || 'rgb(0, 0, 0)';
+    ctx.lineWidth = borderWidth;
+    ctx.beginPath();
+      ctx.strokeRect(0, 0, width, height);
+    ctx.closePath();
   }
 
 
@@ -409,6 +514,8 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     vignette: vignette,
     text: text,
     rgbShift: rgbShift,
+    bend: bend,
+    border: border,
     drawImage: drawImage
   }
 };
