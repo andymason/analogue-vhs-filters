@@ -1,0 +1,50 @@
+body {
+  background: #111;
+  color: #EEE;
+  margin: 0;
+  padding: 0;
+  font-family: monospace;
+  font-size: 16px;
+}
+
+.noscript {
+  padding: 1rem;
+  color: #FFF;
+  text-align: center;
+  background-color: #c40000;
+  font-size: 1.3rem;
+}
+
+#output,
+#source_image {
+  border: 2px solid #222;
+}
+
+.output_wrapper {
+  float: left;
+}
+
+.col1 {
+  float: left;
+}
+
+.source_wrapper {
+
+}
+
+.source_wrapper p {
+  font-size: 0.7rem;
+  margin: 0;
+  color: #666;
+}
+
+.filter_selection {
+  /* float: left;*/
+}
+
+.active_filters {
+
+  background: #333;
+  border: 1px solid #222;
+  padding: 0.4rem;
+}

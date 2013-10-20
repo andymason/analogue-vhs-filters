@@ -6,7 +6,7 @@ var canvas = document.querySelector('#screen');
 function doStuff() {
   var analogue = new Analogue(canvas, img);
   analogue.drawImage();
-  analogue.text('UHF 01', 50, 60, 40, 'rgba(10, 210, 10, 0.8)');
+  analogue.text('UHF 1', 50, 60, 40, 'rgba(10, 210, 10, 0.8)');
   analogue.border(10);
   analogue.saturation(0.1);
   analogue.noise(7, false);

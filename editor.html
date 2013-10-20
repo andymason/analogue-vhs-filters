@@ -2,8 +2,50 @@
 <html>
 <head>
   <title>Editor</title>
+  <link type="text/css" rel="stylesheet" href="editor.css" />
 </head>
 <body>
+
+  <noscript>
+    <p class="noscript">Please enable JavaScript to use this application.</p>
+  </noscript>
+
+  <div>
+    <div class="output_wrapper">
+      <canvas width="640" height="480" id="output"></canvas>
+    </div>
+
+    <div class="col1">
+
+      <div class="source_wrapper">
+        <p>Source content</p>
+        <img id="source_image" alt="Source image" src="test.jpg" width="150" />
+      </div>
+
+      <div class="filter_selection">
+        <label>
+          <span>Filters</span>
+          <select id="filter_selection_dropdown"></select>
+          <button id="filter_selection_add">Add</button>
+        </label>
+      </div>
+
+      <ol class="active_filters">
+        <li class="active_filter_item">
+          <strong class="filter_name">{{ filterName }}</strong>
+          <fieldset>
+            <legend>Options</legend>
+            <label>
+              <span>{{ optionName }}</span>
+              <input type="number" value="{{ optionValue }}" />
+            </label>
+          </fieldset>
+
+          <button class="filter_remove">Remove</button>
+        </li>
+      </ol>
+
+  </div>
 
   <script src="libs/jquery-2.0.3.min.js"></script>
   <script src="libs/underscore.js"></script>
