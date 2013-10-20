@@ -10,7 +10,6 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
   var width = parseInt(canvas.width, 10);
   var height = parseInt(canvas.height, 10);
 
-  console.log(width, height)
 
   var sandboxCanvas = document.createElement('canvas');
   var sandboxCtx = sandboxCanvas.getContext('2d');
@@ -19,6 +18,7 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
 
   function ghost(xShift, yShift, alpha, isNegative) {
     var imgData = _getImageData(canvas);
+
     if (isNegative) {
       imgData = _negative(imgData);
     }
@@ -27,25 +27,14 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
       imgData = _opacity(imgData, alpha);
     }
 
-    sandboxCtx.clearRect(0, 0, width, height);
-
     imgData = _saturation(imgData, -0.4);
     imgData = _brightness(imgData, -90);
     imgData = _contrast(imgData, 90)
 
-
-//    source-over
-//    source-atop
-//    destination-over
-//    destination-out
-//    lighter
-//    xor
-
-
     ctx.globalCompositeOperation = 'lighter';
-
     sandboxCtx.putImageData(imgData, 0, 0);
     ctx.drawImage(sandboxCanvas, xShift, yShift);
+
 
     if (xShift > 0 || xShift < 0) {
       var offset =(xShift > 0) ? xShift - width : xShift + width;
@@ -63,11 +52,7 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
       ctx.drawImage(sandboxCanvas, xOffset,  yOffset);
     }
 
-
-
-
     ctx.globalCompositeOperation = 'source-over';
-
   }
 
   function _getImageData(img) {
@@ -409,18 +394,16 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
   }
 
 
-  function text(msg, x, y, size) {
+  function text(msg, x, y, size, color) {
     var xPos = x || 10;
     var yPos =  y|| 10;
     var fontSize = size || 10;
     var textMsg = msg || 'Hello';
-    ctx.globalCompositeOperation = 'lighter';
+    var textColour = color || 'rgba(0, 200, 0, 0.8)';
 
     ctx.font = 'bold ' + fontSize + 'px Arial';
-    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+    ctx.fillStyle = textColour;
     ctx.fillText(textMsg, xPos, yPos);
-
-    ctx.globalCompositeOperation = 'source-over';
   }
   
   function _rgbShift(imgData, distance, interlaced) {
@@ -492,10 +475,10 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
   }
 
 
-
   function drawImage() {
     ctx.drawImage(img, 0, 0, width, height);
   }
+
 
   return {
     ghost: ghost,
