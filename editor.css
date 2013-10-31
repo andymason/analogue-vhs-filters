@@ -18,6 +18,7 @@ body {
 #output,
 #source_image {
   border: 2px solid #222;
+  display: none;
 }
 
 .output_wrapper {

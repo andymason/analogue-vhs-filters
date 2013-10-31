@@ -1,26 +1,54 @@
+/*
+
+  PresetCombinations:
+    eg:
+      - Security camera = scanlines {10, 2}, tint {#333}, contrast {0.3}
+      - VHS tape = scale {2}, saturation {1.2}
+
+  Filter:
+    - Human name
+    - Bound to image.method
+    - Options
+    - Option types
+    - Option values
+
+
+  Filter combination:
+   - Ordered array of filter models (collection)
+
+
+ */
+
+
 var EDITOR = EDITOR || {
   filterList: [
-    {'name': 'scanlines', 'options': { 'thickness': 'int', 'spacing': 'int' }},
-    {'name': 'ghosting', 'options': { 'thickness': 'int', 'spacing': 'int' }},
-    {'name': 'saturation', 'options': { 'value': 'int' }}
+    {
+      'name': 'scanlines',
+      'options': {
+        'thickness' : {
+          'name': ' thickness',
+          'type':'text',
+          'value': 0
+        },
+        'colour' : {
+          'name': ' color',
+          'type':'color',
+          'value': '#004400'
+        }
+      }
+    },
+    {
+      'name': 'Brightness',
+      'options': {
+        'intensity' : {
+          'name': 'intensity MOFO',
+          'type':'text',
+          'value': 0
+        }
+      }
+    }
   ]
 };
-
-EDITOR.filterModel = Backbone.Model.extend({
-  defaults: {
-    enabled: true
-  }
-});
-
-EDITOR.filterCollection = new Backbone.Collection({
-  model: EDITOR.filterModel
-});
-
-
-
-
-EDITOR.filterCollection.add(EDITOR.filterList);
-console.log(EDITOR);
 
 
 EDITOR.activeFilterCollection = new Backbone.Collection();
@@ -37,21 +65,24 @@ EDITOR.filterDropDownListView = Backbone.View.extend({
     var filter = _.find(EDITOR.filterList, function(filter) {
       return filter.name === filterName;
     }.bind(this));
-    EDITOR.activeFilterCollection.add(filter)
+
+    var model = new Backbone.DeepModel(filter);
+    model.bind('*', function() { console.log(this); });
+
+    EDITOR.activeFilterCollection.add( model );
   },
 
   render: function() {
-    console.log(this.collection);
-    this.collection.each(function(filter) {
-      console.log(filter);
+    EDITOR.filterList.forEach(function(filter) {
       this.$el.append(
-        $('<option>').text(filter.get('name')).attr('value', filter.get('name'))
+        $('<option>').text(filter.name).attr('value', filter.name)
       );
     }.bind(this));
     return this;
   }
 
 });
+
 
 
 var filterView = Backbone.View.extend({
@@ -61,31 +92,100 @@ var filterView = Backbone.View.extend({
   }
 });
 
-var activeFilterCollection = new Backbone.Collection();
+
+
+
+
 var activeFilterCollectionView = Backbone.View.extend({
   tagName: 'div',
+  id: 'activeFilters',
   collection: EDITOR.activeFilterCollection,
 
   initialize: function() {
+    this.collection.on('add', this.addFilterViewItem, this);
+    //this.collection.on('remove', this.render, this);
     this._filterViews = [];
-    console.log('sddsfdsf', this.collection);
-    this.collection.on('add', this.addFilterViewItem)
-
   },
 
   addFilterViewItem: function(model) {
-    console.log(model, this, arguments);
+    this._filterViews.push(new inputView({ model: model}));
+    this.render();
   },
 
   render: function() {
+    this.$el.empty();
+
+//    this._filterViews.forEach(function(filter) {
+//      this.$el.append(inputView({ model: model}).render().$el);
+//    }, this);
+
+    this.collection.each(function(model) {
+      var item = new inputView({ model: model})
+      this.$el.append(item.render().$el);
+    }, this);
+
     return this;
   }
 });
 
-var fcv = new activeFilterCollectionView();
 
-var drop = new EDITOR.filterDropDownListView({
-  collection: EDITOR.filterCollection
+
+var inputView = Backbone.View.extend({
+  tagName: 'div',
+  className: 'filter',
+
+  events: {
+    'click .remove': 'destroy',
+    'click .update': 'update',
+    'change input': 'update'
+  },
+
+  destroy: function() {
+    this.remove()
+    EDITOR.activeFilterCollection.remove(this.model);
+  },
+
+  update: function() {
+    _.each(this.$('input'), function(el) {
+      var optionName = 'options.' + $(el).attr('name').trim() + '.value';
+      var options = {};
+      options[optionName] = $(el).val();
+      this.model.set(options);
+    }, this);
+  },
+
+  initialize: function(options) {
+    this.template = _.template('<p><%= name %></p>     <% _.each(options, function(option, key) { %>  <label> <%= option.name %> <input value="<%= option.value %>" type="<%= option.type %>" name="<%= key %>"> </label>    <% }); %>    <button class="remove">Remove</button> <button class="update">Update</button>');
+  },
+
+  render: function() {
+    this.$el.html(this.template(this.model.toJSON()));
+    return this;
+  }
+
 });
 
-$('body').append(drop.render().$el);
+
+
+var activeFiltersList = new activeFilterCollectionView();
+var dropDownMenu = new EDITOR.filterDropDownListView();
+
+$('body').append(dropDownMenu.render().$el);
+$('body').append(activeFiltersList.render().$el);
+
+
+/*
+
+ analogue.text('UHF 1', 50, 60, 40, 'rgba(10, 210, 10, 0.8)');
+ analogue.border(10);
+ analogue.saturation(0.1);
+ analogue.noise(7, false);
+ analogue.noise(5, true);
+
+ analogue.stutter(0.1);
+
+ analogue.rgbShift(0.13, true);
+ analogue.ghost(42, 0, 0.2, false);
+ */
+
+
