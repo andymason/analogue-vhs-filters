@@ -203,8 +203,8 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     ctx.putImageData(imgData, 0, 0);
   }
 
-  function _scanlines(imgData, amount, spacing) {
-    var brightness = amount || 10;
+  function _scanlines(imgData, brightness, spacing) {
+    var brightness = brightness || 10;
     var lineSpacing = spacing || 3;
     var data = imgData.data;
     for (var row = 0; row < height; row++) {
@@ -219,8 +219,8 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     return imgData;
   }
 
-  function scanlines(amount, spacing) {
-    var imgData = _scanlines(_getImageData(canvas), amount, spacing);
+  function scanlines(brightness, spacing) {
+    var imgData = _scanlines(_getImageData(canvas), brightness, spacing);
     ctx.putImageData(imgData, 0, 0);
   }
 
@@ -405,19 +405,19 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     ctx.fillStyle = textColour;
     ctx.fillText(textMsg, xPos, yPos);
   }
-  
+
   function _rgbShift(imgData, distance, interlaced) {
     var data = imgData.data;
-    var isInterlaces = interlaced || false; 
+    var isInterlaces = interlaced || false;
     var lowerShift = (isInterlaces) ? Math.round(2 * distance) : distance;
     var upperShift = (isInterlaces) ? Math.round(4 * distance) : distance;
     var shiftAmount = distance;
-    
+
     for (var i = 0; i < data.length; i += 4) {
       if (isInterlaces) {
           shiftAmount = (i % 2) ? lowerShift : upperShift;
       }
-      
+
       data[i] = data[i + 4 * shiftAmount * 4];
       data[i + 1] = data[i + 1 + (4 * shiftAmount)];
       data[i + 2] = data[i + 2 + (4 * shiftAmount)];

@@ -19,6 +19,15 @@
 
  */
 
+var img = document.querySelector('#source_image');
+var canvas = document.querySelector('#output');
+var analogue = new Analogue(canvas, img);
+analogue.drawImage();
+//analogue.scanlines();
+//analogue.brightness(-50);
+//analogue.text('UHF 1', 50, 60, 40, 'rgba(10, 210, 10, 0.8)');
+//analogue.rgbShift(0.13, true);
+
 
 var EDITOR = EDITOR || {
   filterList: [
@@ -26,24 +35,32 @@ var EDITOR = EDITOR || {
       'name': 'scanlines',
       'options': {
         'thickness' : {
-          'name': ' thickness',
-          'type':'text',
-          'value': 0
+          'name': 'thickness',
+          'type':'number',
+          'value': 0,
+          'min': -255,
+          'max': 255,
+          'step': 1
         },
-        'colour' : {
-          'name': ' color',
-          'type':'color',
-          'value': '#004400'
+        'brightness' : {
+          'name': 'brightness',
+          'type':'number',
+          'value': 0,
+          'min': 0,
+          'step': 1
         }
       }
     },
     {
-      'name': 'Brightness',
+      'name': 'brightness',
       'options': {
         'intensity' : {
-          'name': 'intensity MOFO',
-          'type':'text',
-          'value': 0
+          'name': 'intensity',
+          'type':'number',
+          'value': 0,
+          'min': -255,
+          'max': 255,
+          'step': 1
         }
       }
     }
@@ -51,38 +68,50 @@ var EDITOR = EDITOR || {
 };
 
 
-EDITOR.activeFilterCollection = new Backbone.Collection();
+var FModel = Backbone.DeepModel.extend({
 
-EDITOR.filterDropDownListView = Backbone.View.extend({
-  tagName: 'select',
+  triggerOutput: function() {
+    var paramArray = [];
+    _.each(this.get('options'), function(option, key) {
+      paramArray.push( (isNaN(option.value)) ? option.value : parseFloat(option.value) );
+    });
 
-  events: {
-    'change': 'addFilter'
-  },
-
-  addFilter: function() {
-    var filterName = this.$el.val();
-    var filter = _.find(EDITOR.filterList, function(filter) {
-      return filter.name === filterName;
-    }.bind(this));
-
-    var model = new Backbone.DeepModel(filter);
-    model.bind('*', function() { console.log(this); });
-
-    EDITOR.activeFilterCollection.add( model );
-  },
-
-  render: function() {
-    EDITOR.filterList.forEach(function(filter) {
-      this.$el.append(
-        $('<option>').text(filter.name).attr('value', filter.name)
-      );
-    }.bind(this));
-    return this;
+    analogue[this.get('name')].apply(this, paramArray)
+    //console.log( this.get('name'), paramArray);
   }
 
 });
 
+EDITOR.activeFilterCollection = new Backbone.Collection();
+
+EDITOR.filterDropDownListView = Backbone.View.extend({
+  template: _.template($('#template_filter_select').html()),
+  events: {
+    'click .filter_selection_add': 'addFilter'
+  },
+
+  addFilter: function() {
+    var filterName = this.$('.filter_selection_dropdown').val();
+    var filter = _.find(EDITOR.filterList, function(filter) {
+      return filter.name === filterName;
+    }.bind(this));
+
+    var model = new FModel(filter);
+    EDITOR.activeFilterCollection.add( model );
+  },
+
+  render: function() {
+    this.$el.html(this.template());
+
+    EDITOR.filterList.forEach(function(filter) {
+      this.$('.filter_selection_dropdown').append(
+        $('<option>').text(filter.name).attr('value', filter.name)
+      );
+    }, this);
+
+    return this;
+  }
+});
 
 
 var filterView = Backbone.View.extend({
@@ -103,26 +132,35 @@ var activeFilterCollectionView = Backbone.View.extend({
 
   initialize: function() {
     this.collection.on('add', this.addFilterViewItem, this);
-    //this.collection.on('remove', this.render, this);
+    this.collection.on('remove', this.render, this);
+    this.collection.on('change', this.updateOutput, this);
     this._filterViews = [];
   },
 
   addFilterViewItem: function(model) {
+    console.log('collection view: ADD');
     this._filterViews.push(new inputView({ model: model}));
     this.render();
+  },
+
+  updateOutput: function() {
+    console.log('updated', arguments);
+    analogue.drawImage();
+    this.collection.each(function(model) {
+      model.triggerOutput();
+    });
   },
 
   render: function() {
     this.$el.empty();
 
-//    this._filterViews.forEach(function(filter) {
-//      this.$el.append(inputView({ model: model}).render().$el);
-//    }, this);
-
     this.collection.each(function(model) {
+      console.log(model);
       var item = new inputView({ model: model})
       this.$el.append(item.render().$el);
     }, this);
+
+    this.updateOutput();
 
     return this;
   }
@@ -141,8 +179,8 @@ var inputView = Backbone.View.extend({
   },
 
   destroy: function() {
-    this.remove()
     EDITOR.activeFilterCollection.remove(this.model);
+    this.remove();
   },
 
   update: function() {
@@ -155,7 +193,7 @@ var inputView = Backbone.View.extend({
   },
 
   initialize: function(options) {
-    this.template = _.template('<p><%= name %></p>     <% _.each(options, function(option, key) { %>  <label> <%= option.name %> <input value="<%= option.value %>" type="<%= option.type %>" name="<%= key %>"> </label>    <% }); %>    <button class="remove">Remove</button> <button class="update">Update</button>');
+    this.template = _.template($('#template_input').html());
   },
 
   render: function() {

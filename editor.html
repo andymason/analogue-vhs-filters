@@ -21,31 +21,57 @@
         <p>Source content</p>
         <img id="source_image" alt="Source image" src="test.jpg" width="150" />
       </div>
-
-      <div class="filter_selection">
-        <label>
-          <span>Filters</span>
-          <select id="filter_selection_dropdown"></select>
-          <button id="filter_selection_add">Add</button>
-        </label>
-      </div>
-
-      <ol class="active_filters">
-        <li class="active_filter_item">
-          <strong class="filter_name">{{ filterName }}</strong>
-          <fieldset>
-            <legend>Options</legend>
-            <label>
-              <span>{{ optionName }}</span>
-              <input type="number" value="{{ optionValue }}" />
-            </label>
-          </fieldset>
-
-          <button class="filter_remove">Remove</button>
-        </li>
-      </ol>
-
   </div>
+
+  <script type="text/template" id="template_filter_select">
+      <div class="filter_selection">
+          <label>
+              <span>Filters</span>
+              <select class="filter_selection_dropdown"></select>
+              <button class="filter_selection_add">Add</button>
+          </label>
+      </div>
+  </script>
+
+  <script type="text/template" id="template_input">
+      <p><%= name %></p>
+
+      <% _.each(options, function(option, key) { %>
+        <label>
+            <%= option.name %>
+            <input
+                <% _.each(option, function(value, key) { %>
+                    <%= key %>="<%= value %>"
+                <% }); %>
+            >
+        </label>
+      <% }); %>
+
+
+      <button class="remove">Remove</button>
+      <button class="update">Update</button>
+  </script>
+
+      <script type="text/template">
+
+
+
+          <ol class="active_filters">
+              <li class="active_filter_item">
+                  <strong class="filter_name">{{ filterName }}</strong>
+                  <fieldset>
+                      <legend>Options</legend>
+                      <label>
+                          <span>{{ optionName }}</span>
+                          <input type="number" value="{{ optionValue }}" />
+                      </label>
+                  </fieldset>
+
+                  <button class="filter_remove">Remove</button>
+              </li>
+          </ol>
+
+      </script>
 
   <script src="libs/jquery-2.0.3.min.js"></script>
   <script src="libs/underscore.js"></script>
