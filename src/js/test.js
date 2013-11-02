@@ -4,6 +4,8 @@ var canvas = document.querySelector('#screen');
 //canvas.width = window.innerWidth;
 
 function doStuff() {
+  'use strict';
+
   var analogue = new Analogue(canvas, img);
   analogue.drawImage();
   analogue.text('UHF 1', 50, 60, 40, 'rgba(10, 210, 10, 0.8)');

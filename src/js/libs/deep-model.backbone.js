@@ -126,7 +126,7 @@
 ;(function(factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD
-        define(['underscore', 'backbone'], factory);
+        define(['../../.', 'backbone'], factory);
     } else {
         // globals
         factory(_, Backbone);
