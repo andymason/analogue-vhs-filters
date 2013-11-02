@@ -23,13 +23,15 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
       imgData = _negative(imgData);
     }
 
-    if (!!alpha) {
+    if (!isNaN(alpha)) {
       imgData = _opacity(imgData, alpha);
     }
 
+    console.log(alpha, isNegative);
+
     imgData = _saturation(imgData, -0.4);
     imgData = _brightness(imgData, -90);
-    imgData = _contrast(imgData, 90)
+    imgData = _contrast(imgData, 90);
 
     ctx.globalCompositeOperation = 'lighter';
     sandboxCtx.putImageData(imgData, 0, 0);
@@ -108,18 +110,29 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     return val;
   }
 
-  function _brightness(imgData, brightness) {
+//  function _brightness(imgData, brightness) {
+//    var data = imgData.data;
+//    for (var i = 0; i < data.length; i += 4) {
+//      data[i] = _truncate(data[i] + brightness);
+//      data[i + 1] = _truncate(data[i + 1] + brightness);
+//      data[i + 2] = _truncate(data[i + 2] + brightness);
+//    }
+//    return imgData;
+//  }
+
+  function _brightness(imgData, b) {
+    var brightnessVal = b || 0;
     var data = imgData.data;
     for (var i = 0; i < data.length; i += 4) {
-      data[i] = _truncate(data[i] + brightness);
-      data[i + 1] = _truncate(data[i + 1] + brightness);
-      data[i + 2] = _truncate(data[i + 2] + brightness);
+      data[i] = _truncate(data[i] + brightnessVal);
+      data[i + 1] = _truncate(data[i + 1] + brightnessVal);
+      data[i + 2] = _truncate(data[i + 2] + brightnessVal);
     }
     return imgData;
   }
 
-  function brightness(brightnessVal) {
-    var imgData = _brightness(_getImageData(canvas), brightnessVal);
+  function brightness(amount) {
+    var imgData = _brightness(_getImageData(canvas), amount);
     ctx.putImageData(imgData, 0, 0);
   }
 
@@ -203,9 +216,10 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     ctx.putImageData(imgData, 0, 0);
   }
 
-  function _scanlines(imgData, brightness, spacing) {
-    var brightness = brightness || 10;
-    var lineSpacing = spacing || 3;
+  function scanlines(b, l) {
+    var imgData = _getImageData(canvas);
+    var brightness = (isNaN(b)) ? 10 : b;
+    var lineSpacing = (isNaN(l)) ? 3 : l;
     var data = imgData.data;
     for (var row = 0; row < height; row++) {
       if (row % lineSpacing !== 0) continue;
@@ -216,11 +230,6 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
           data[i + 2] = _truncate(data[i + 2] + brightness);
       }
     }
-    return imgData;
-  }
-
-  function scanlines(brightness, spacing) {
-    var imgData = _scanlines(_getImageData(canvas), brightness, spacing);
     ctx.putImageData(imgData, 0, 0);
   }
 
@@ -434,9 +443,9 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
   function _bend(imgData, amount, freq, x, y) {
     var data = imgData.data;
     var frequency =  (height/ Math.PI) / (freq || 1);
-    var amp = amount || 100;
-    var xOffset = (x || 0) * 4;
-    var yOffset = (y || 0);
+    var amp = (isNaN(amount)) ? 100 : amount;
+    var xOffset = ((isNaN(x)) ? 0 : x) * 4;
+    var yOffset = ((isNaN(y)) ? 0 : y);
 
     for (var i = 0; i < height; i++) {
       var colourShift = Math.round(Math.sin((i + yOffset) / frequency) * amp);
@@ -448,7 +457,8 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
         data[index + 1] = data[(index + 1 + 4 * colourShift) + xOffset];
         data[index + 2] = data[(index + 2 + 4 * colourShift) + xOffset];
       }
-  }
+    }
+
     return imgData;
   }
 

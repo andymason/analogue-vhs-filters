@@ -13,13 +13,11 @@ var FilterCollectionView = Backbone.View.extend({
   },
 
   addFilterViewItem: function(model) {
-    console.log('collection view: ADD');
     this._filterViews.push(new app.FilterItemView({ model: model}));
     this.render();
   },
 
   updateOutput: function() {
-    console.log('updated', arguments);
     analogue.drawImage();
     this.collection.each(function(model) {
       model.triggerOutput();
@@ -30,7 +28,6 @@ var FilterCollectionView = Backbone.View.extend({
     this.$el.empty();
 
     this.collection.each(function(model) {
-      console.log(model);
       var item = new  app.FilterItemView({ model: model});
       this.$el.append(item.render().$el);
     }, this);

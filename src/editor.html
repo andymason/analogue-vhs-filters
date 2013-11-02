@@ -44,54 +44,31 @@
 
   <script type="text/template" id="template_input">
       <p><%= name %></p>
-
-      <% _.each(options, function(option, key) { %>
-        <label>
-            <%= option.name %>
-            <input
-                <% _.each(option, function(value, key) { %>
-                    <%= key %>="<%= value %>"
-                <% }); %>
-            >
-        </label>
-      <% }); %>
-
-
+      <div class="inputs_wrapper"></div>
       <button class="remove">Remove</button>
-      <button class="update">Update</button>
   </script>
 
-      <script type="text/template">
-
-
-
-          <ol class="active_filters">
-              <li class="active_filter_item">
-                  <strong class="filter_name">{{ filterName }}</strong>
-                  <fieldset>
-                      <legend>Options</legend>
-                      <label>
-                          <span>{{ optionName }}</span>
-                          <input type="number" value="{{ optionValue }}" />
-                      </label>
-                  </fieldset>
-
-                  <button class="filter_remove">Remove</button>
-              </li>
-          </ol>
-
-      </script>
+  <script type="text/template" id="template_input_field">
+    <label>
+      <%= option.name %>
+      <input
+      <% _.each(option, function(value, key) { %>
+      <%= key %>="<%= value %>"
+      <% }); %>
+      >
+    </label>
+  </script>
 
   <script src="js/libs/jquery-2.0.3.min.js"></script>
   <script src="js/libs/underscore.js"></script>
   <script src="js/libs/backbone.js"></script>
   <script src="js/libs/deep-model.backbone.js"></script>
   <script src="js/analogue.js"></script>
-  <script src="js/models/filterData.js"></script>
   <script src="js/models/filter.js"></script>
+  <script src="js/models/filterData.js"></script>
+
   <script src="js/collections/filter.js"></script>
   <script src="js/views/filterItem.js"></script>
-  <!--<script src="js/views/filterSelection.js"></script>-->
   <script src="js/views/filters.js"></script>
   <script src="js/views/app.js"></script>
   <script src="js/app.js"></script>

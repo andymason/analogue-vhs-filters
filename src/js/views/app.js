@@ -13,7 +13,7 @@ app.AppView = Backbone.View.extend({
     this.$dropdown = this.$('#filter_selection_dropdown');
     this.$activeFilters = this.$('#active_filters');
 
-    app.filterData.each(this.addDropdownItem, this);
+    app.filterData.each(this.addSelectOptions, this);
 
     this.render();
   },
@@ -22,20 +22,15 @@ app.AppView = Backbone.View.extend({
     'click #filter_selection_add' : 'addFilter'
   },
 
-  addDropdownItem: function(filter) {
+  addSelectOptions: function(filter) {
     this.$dropdown.append(
       $('<option>').text(filter.get('name')).attr('value', filter.get('name'))
     );
   },
 
-  addFilter: function(filter) {
-    var filterName = this.$dropdown.val();
-    console.log(filterName);
-    var filterData = app.filterData.find(function(filter) {
-      return filter.get('name') === filterName;
-    }, this);
-
-    var model = new app.Filter(filterData.toJSON());
+  addFilter: function() {
+    var filterModel = app.filterData.findWhere( { name: this.$dropdown.val() });
+    var model = filterModel.clone();
     app.FilterCollection.add( model );
 
     var view = new app.FilterItemView({ model: model });
@@ -43,16 +38,8 @@ app.AppView = Backbone.View.extend({
 
   },
 
-  addAll: function() {
-
-  },
-
   render: function() {
-    //this.$el.html('<h1>teset</h1>');
-    console.log('jere');
-    //var activeFiltersList = new activeFilterCollectionView();
-    //var dropDownMenu = new EDITOR.filterDropDownListView();
-    //$('body').append(dropDownMenu.render().$el);
+
   }
 
 });
