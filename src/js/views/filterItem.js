@@ -30,10 +30,21 @@ app.FilterItemView = Backbone.View.extend({
 
     var op = {};
     var modelOption = 'options.' + optionIndex + '.value';
-    var value = ($input.attr('type') === 'checkbox') ? $input.prop('checked') : $input.val();
 
-    op[modelOption] =  (isNaN(parseFloat(value))) ? !!value : parseFloat(value);
-    console.log(op, value);
+    var value;
+    if ($input.attr('type') === 'checkbox') {
+      value = !!$input.prop('checked');
+    }
+
+    if ($input.attr('type') === 'range') {
+      value = parseFloat($input.val());
+    }
+
+    if ($input.attr('type') === 'color' || $input.attr('type') === 'text') {
+      value = $input.val();
+    }
+
+    op[modelOption] = value;
     this.model.set(op);
   },
 

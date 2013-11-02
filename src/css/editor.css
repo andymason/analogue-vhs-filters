@@ -1,9 +1,9 @@
 body {
-  background: #84421f;
+  background: rgba(0, 0, 0, 0.95);
   color: #EEE;
   margin: 0;
   padding: 0;
-  font-family: monospace;
+  font-family: "Helvetica", arial, sans-serif;
   font-size: 16px;
 }
 
@@ -44,8 +44,42 @@ body {
 }
 
 .active_filters {
-
   background: #333;
   border: 1px solid #222;
   padding: 0.4rem;
+}
+
+
+.filter {
+  border: 1px solid #333;
+  background: #222;
+  position: relative;
+  padding-right: 60px;
+  overflow: hidden;
+  font-size: 12px;
+}
+
+.filter_name {
+  margin: 0;
+  float: left;
+}
+
+.option_name {
+  display: inline-block;
+  min-width: 90px;
+}
+
+.filter_input {
+  display: block;
+}
+
+.inputs_wrapper {
+  margin-left: 200px;
+}
+
+.remove {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 10px;
 }

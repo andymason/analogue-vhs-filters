@@ -43,14 +43,14 @@
 
 
   <script type="text/template" id="template_input">
-      <p><%= name %></p>
+      <p class="filter_name"><%= name %></p>
       <div class="inputs_wrapper"></div>
       <button class="remove">Remove</button>
   </script>
 
   <script type="text/template" id="template_input_field">
-    <label>
-      <%= option.name %>
+    <label class="filter_input">
+      <span class="option_name"><%= option.name %></span>
       <input
       <% _.each(option, function(value, key) { %>
       <%= key %>="<%= value %>"

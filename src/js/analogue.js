@@ -27,8 +27,6 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
       imgData = _opacity(imgData, alpha);
     }
 
-    console.log(alpha, isNegative);
-
     imgData = _saturation(imgData, -0.4);
     imgData = _brightness(imgData, -90);
     imgData = _contrast(imgData, 90);
@@ -110,16 +108,6 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     return val;
   }
 
-//  function _brightness(imgData, brightness) {
-//    var data = imgData.data;
-//    for (var i = 0; i < data.length; i += 4) {
-//      data[i] = _truncate(data[i] + brightness);
-//      data[i + 1] = _truncate(data[i + 1] + brightness);
-//      data[i + 2] = _truncate(data[i + 2] + brightness);
-//    }
-//    return imgData;
-//  }
-
   function _brightness(imgData, b) {
     var brightnessVal = b || 0;
     var data = imgData.data;
@@ -183,9 +171,7 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
   }
 
   function saturation(saturationVal) {
-    console.time('filter');
     var imgData = _saturation(_getImageData(canvas), saturationVal);
-    console.timeEnd('filter');
     ctx.putImageData(imgData, 0, 0);
   }
 
@@ -216,8 +202,7 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     ctx.putImageData(imgData, 0, 0);
   }
 
-  function scanlines(b, l) {
-    var imgData = _getImageData(canvas);
+  function _scanlines(imgData, b, l) {
     var brightness = (isNaN(b)) ? 10 : b;
     var lineSpacing = (isNaN(l)) ? 3 : l;
     var data = imgData.data;
@@ -230,6 +215,11 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
           data[i + 2] = _truncate(data[i + 2] + brightness);
       }
     }
+    return imgData;
+  }
+
+  function scanlines(brightness, lineSpacing) {
+    var imgData = _scanlines(_getImageData(canvas), brightness, lineSpacing);
     ctx.putImageData(imgData, 0, 0);
   }
 
@@ -345,16 +335,16 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
   }
 
   function brightnessLines(alpha, yPos, height) {
-    var barAlpha = alpha || 0.5;
-    var barYPos = yPos || 200;
-    var barHeight = height || 100;
+    var barAlpha = (isNaN(alpha)) ? 0.5 : alpha;
+    var barYPos = (isNaN(yPos)) ?  200 : yPos;
+    var barHeight = (isNaN(height)) ? 100 : height;
 
     ctx.globalCompositeOperation = 'lighter';
 
     var linGrad = ctx.createLinearGradient(width/2, barYPos, width/2, barYPos + barHeight);
     linGrad.addColorStop(0, 'rgba(255, 255, 255, 0)');
-    linGrad.addColorStop(0.07, 'rgba(255, 255, 255, ' + alpha + ')');
-    linGrad.addColorStop(0.93, 'rgba(255, 255, 255, ' + alpha + ')');
+    linGrad.addColorStop(0.07, 'rgba(255, 255, 255, ' + barAlpha + ')');
+    linGrad.addColorStop(0.93, 'rgba(255, 255, 255, ' + barAlpha + ')');
     linGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
 
     ctx.fillStyle = linGrad;
@@ -510,6 +500,6 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     bend: bend,
     border: border,
     drawImage: drawImage
-  }
+  };
 };
 
