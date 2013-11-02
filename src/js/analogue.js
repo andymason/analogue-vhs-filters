@@ -470,7 +470,7 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     ctx.strokeStyle = color || 'rgb(0, 0, 0)';
     ctx.lineWidth = borderWidth;
     ctx.beginPath();
-      ctx.strokeRect(0, 0, width, height);
+    ctx.strokeRect(0, 0, width, height);
     ctx.closePath();
   }
 
