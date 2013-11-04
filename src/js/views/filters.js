@@ -9,12 +9,13 @@ var FilterCollectionView = Backbone.View.extend({
     this.collection.on('add', this.addFilterViewItem, this);
     this.collection.on('remove', this.render, this);
     this.collection.on('change', this.updateOutput, this);
-    this._filterViews = [];
+    this.collection.on('reset', this.empty, this);
   },
 
   addFilterViewItem: function(model) {
-    this._filterViews.push(new app.FilterItemView({ model: model}));
-    this.render();
+    var view = new app.FilterItemView({ model: model});
+    this.$el.append(view.render().$el);
+    this.render(); 
   },
 
   updateOutput: function() {
@@ -24,16 +25,13 @@ var FilterCollectionView = Backbone.View.extend({
     });
   },
 
-  render: function() {
+  empty: function() {
     this.$el.empty();
+    this.render();
+  },
 
-    this.collection.each(function(model) {
-      var item = new  app.FilterItemView({ model: model});
-      this.$el.append(item.render().$el);
-    }, this);
-
+  render: function() {
     this.updateOutput();
-
     return this;
   }
 });

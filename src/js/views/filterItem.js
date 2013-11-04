@@ -14,9 +14,13 @@ app.FilterItemView = Backbone.View.extend({
   initialize: function(options) {
     this.template = _.template($('#template_input').html());
     this.inputTemplate = _.template($('#template_input_field').html());
+
+    this.model.on('reset', this.destroy, this);
+    console.log('init', this.model);
   },
 
   destroy: function() {
+    console.log('model view destory');
     app.FilterCollection.remove(this.model);
     this.remove();
   },
