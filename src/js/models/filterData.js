@@ -128,7 +128,7 @@ app.filterData = new FilterData([
         'value': 2,
         'min': 1,
         'max': 50,
-        'step': 1
+        'step': 0.1
       }
     ]
   },
@@ -141,8 +141,8 @@ app.filterData = new FilterData([
         'type':'range',
         'value': 2,
         'min': 0,
-        'max': 50,
-        'step': 1
+        'max': 10,
+        'step': 0.1
       }
     ]
   },
@@ -251,12 +251,11 @@ app.filterData = new FilterData([
         'type':'range',
         'value': 0.3,
         'max': 1,
-        'step': 0.1
+        'step': 0.01
       },
       {
         'name': 'negative',
         'type':'checkbox',
-        'checked': 'checked',
         'value': true
       }
     ]
@@ -329,7 +328,7 @@ app.filterData = new FilterData([
         'value': 2,
         'min': 0,
         'max': 10,
-        'step': 1
+        'step': 0.1
       },
       {
         'name': 'interlaced',
@@ -387,8 +386,8 @@ app.filterData = new FilterData([
         'name': 'bend_amount',
         'type':'range',
         'value': 10,
-        'max': 3000,
-        'step': 1
+        'max': 1000,
+        'step': 0.1
       },
       {
         'name': 'frequency',

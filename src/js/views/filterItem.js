@@ -16,7 +16,6 @@ app.FilterItemView = Backbone.View.extend({
     this.inputTemplate = _.template($('#template_input_field').html());
 
     this.model.on('reset', this.destroy, this);
-    console.log('init', this.model);
   },
 
   destroy: function() {
@@ -25,7 +24,7 @@ app.FilterItemView = Backbone.View.extend({
     this.remove();
   },
 
-  update: function(event) {
+  update: _.debounce(function(event) {
     var $input = $(event.target);
     var optionIndex = this.model.get('options').map(function(e) {
         return e.name;
@@ -50,7 +49,7 @@ app.FilterItemView = Backbone.View.extend({
 
     op[modelOption] = value;
     this.model.set(op);
-  },
+  }, 300),
 
   addInput: function(option) {
     var $view = $(this.inputTemplate({ option: option }));

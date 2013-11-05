@@ -49,16 +49,19 @@ app.AppView = Backbone.View.extend({
 
     if (example) {
       app.FilterCollection.reset();
-      _.each(example.filters, function(filerOptions, filterName) {
-        this.insertFilter(filterName, filerOptions);
+
+      _.each(example.filters, function(filter) {
+        this.insertFilter(filter.name, filter.options, true);
       }, this);
+
+      app.FilterCollectionView.updateOutput();
     }
 
   },
 
-  insertFilter: function(filterName, options) {
+  insertFilter: function(filterName, options, preventViewUpdate) {
     var filterModel = app.filterData.findWhere( { name: filterName });
-    var model = filterModel.clone();
+    var model = new app.Filter( filterModel.toJSON() );
 
     if (options) {
       _.each(options, function(value, optionName) {
@@ -68,14 +71,13 @@ app.AppView = Backbone.View.extend({
         }).indexOf(optionName);
 
         var op = {};
-        var optionPath = 'options.' + optionIndex + '.' + '.value';
+        var optionPath = 'options.' + optionIndex +  '.value';
         op[optionPath] = value;
-        model.set(op[optionPath]);
-
+        model.set(op);
       });
     }
 
-    app.FilterCollection.add( model );
+    app.FilterCollection.add( model, { preventViewUpdate: preventViewUpdate } );
 
 //    var view = new app.FilterItemView({ model: model });
 //    this.$activeFilters.append(view.render().el);

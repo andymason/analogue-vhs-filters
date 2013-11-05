@@ -57,6 +57,7 @@
       <input
       <% _.each(option, function(value, key) { %>
       <%= key %>="<%= value %>"
+      <% if (value === true) { %> checked <% } %>
       <% }); %>
       >
     </label>
