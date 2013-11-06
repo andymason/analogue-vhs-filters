@@ -13,13 +13,18 @@ var FilterCollectionView = Backbone.View.extend({
   },
 
   addFilterViewItem: function(model, collection, options) {
-    var view = new app.FilterItemView({ model: model});
-    this.$el.append(view.render().$el);
+//    var view = new app.FilterItemView({ model: model});
+//    this.$el.append(view.render().$el);
+    this.$el.empty();
+    this.collection.each(function(modelmmm) {
+      var view = new app.FilterItemView({ model: modelmmm});
+      this.$el.append(view.render().$el);
+    }, this);
 
     if (options && options.preventViewUpdate) {
       return;
     } else {
-      this.updateOutput();
+        this.updateOutput();
       //this.render();
     }
   },

@@ -6,8 +6,10 @@ app.FilterItemView = Backbone.View.extend({
   className: 'filter',
 
   events: {
-    'click .remove': 'destroy',
-    'change input': 'update'
+    'click .remove':    'destroy',
+    'change input':     'update',
+    'click .move_up':   'moveUp',
+    'click .move_down': 'moveDown'
   },
 
 
@@ -22,6 +24,14 @@ app.FilterItemView = Backbone.View.extend({
     console.log('model view destory');
     app.FilterCollection.remove(this.model);
     this.remove();
+  },
+
+  moveUp: function() {
+    this.model.moveUp();
+  },
+
+  moveDown: function() {
+    this.model.moveDown();
   },
 
   update: _.debounce(function(event) {

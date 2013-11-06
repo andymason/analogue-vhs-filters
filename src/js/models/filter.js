@@ -10,6 +10,14 @@ app.Filter = Backbone.DeepModel.extend({
       options = modelOptions.map(function(option) { return option.value; });
     }
     analogue[this.get('name')].apply(this, options);
+  },
+
+  moveUp: function() {
+    this.collection.moveUp(this);
+  },
+
+  moveDown: function() {
+    this.collection.moveDown(this);
   }
 
 });

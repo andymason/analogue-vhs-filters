@@ -46,9 +46,13 @@
 
 
   <script type="text/template" id="template_input">
+      <div class="move">
+          <div class="move_button move_up" title="Move up">&#9650;</div>
+          <div class="move_button move_down" title="Move down">&#9660;</div>
+      </div>
       <p class="filter_name"><%= name %></p>
       <div class="inputs_wrapper"></div>
-      <button class="remove">Remove</button>
+      <button class="remove" title="Remove filter"> &#10060;</button>
   </script>
 
   <script type="text/template" id="template_input_field">
