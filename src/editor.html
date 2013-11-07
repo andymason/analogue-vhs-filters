@@ -22,9 +22,11 @@
 
     <div class="col1" id="editor">
 
-      <div class="source_wrapper">
+      <div id="sourceWrapper">
         <p>Source content</p>
-        <img id="source_image" alt="Source image" src="img/test.jpg" width="150" />
+        <img id="sourceImage" class="source_image" alt="Source image" src="img/test.jpg" width="150" />
+        <input type="text" class="source_input" value="img/test.jpg" />
+        <button class="source_update">Update</button>
       </div>
 
 
@@ -73,12 +75,14 @@
   <script src="js/libs/deep-model.backbone.js"></script>
   <script src="js/analogue.js"></script>
   <script src="js/models/filter.js"></script>
+  <script src="js/models/input.js"></script>
   <script src="js/models/exampleCombinations.js"></script>
   <script src="js/models/filterData.js"></script>
 
   <script src="js/collections/filter.js"></script>
   <script src="js/views/filterItem.js"></script>
   <script src="js/views/filters.js"></script>
+  <script src="js/views/sourceInput.js"></script>
   <script src="js/views/app.js"></script>
   <script src="js/app.js"></script>
 

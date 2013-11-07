@@ -1,6 +1,6 @@
 var app = app || {};
 
-var img = document.querySelector('#source_image');
+var img = document.querySelector('#sourceImage');
 var canvas = document.querySelector('#output');
 var analogue = new Analogue(canvas, img);
 analogue.drawImage();

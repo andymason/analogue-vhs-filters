@@ -479,6 +479,10 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     ctx.drawImage(img, 0, 0, width, height);
   }
 
+  function updateImage(src) {
+    img = src;
+  }
+
 
   return {
     ghost: ghost,
@@ -499,7 +503,8 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     rgbShift: rgbShift,
     bend: bend,
     border: border,
-    drawImage: drawImage
+    drawImage: drawImage,
+    updateImage: updateImage
   };
 };
 
