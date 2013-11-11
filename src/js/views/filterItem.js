@@ -6,6 +6,7 @@ app.FilterItemView = Backbone.View.extend({
   className: 'filter',
 
   events: {
+    'click': 'toggleView',
     'click .remove':    'destroy',
     'change input':     'update',
     'click .move_up':   'moveUp',
@@ -32,6 +33,10 @@ app.FilterItemView = Backbone.View.extend({
 
   moveDown: function() {
     this.model.moveDown();
+  },
+
+  toggleView: function() {
+    this.$el.toggleClass('closed');
   },
 
   update: _.debounce(function(event) {
@@ -69,6 +74,7 @@ app.FilterItemView = Backbone.View.extend({
   render: function() {
     this.$el.html(this.template(this.model.toJSON()));
     this.$inputWrapper = this.$('.inputs_wrapper');
+    this.$el.addClass('closed');
     _.each(this.model.get('options'), this.addInput, this);
 
     return this;

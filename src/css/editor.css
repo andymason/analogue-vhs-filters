@@ -59,6 +59,11 @@ body {
   padding-left: 20px;
   padding-right: 20px;
   margin: 1px 0 1px 0;
+  cursor: pointer;
+}
+
+.filter.closed .inputs_wrapper {
+  display: none;
 }
 
 .filter_name {
