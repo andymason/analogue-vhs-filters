@@ -484,6 +484,116 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
   }
 
 
+  function pixelSort() {
+    var blackValue = -10000000;
+
+    // equivalent to rgb(164, 114, 128)
+    var whiteValue = -6000000;
+
+    //  var blackValue = (255 << 24) + (32<< 16) + (32 << 8) + 32;
+    var brightnessValue = 30;
+    //  var whiteValue = (255 << 24) + (230<< 16) + (230 << 8) + 230;
+    var canvasData = _getImageData(canvas);
+
+    var imageData = canvasData.data;
+
+    for (var row = 0; row < height; row++) {
+      sortRow(row);
+    }
+
+
+    function sortRow(row) {
+      var x = 0;
+      var y = row;
+      var xend = 0;
+
+      function getPixelBrightness(x, y) {
+        var offset = (x + y * width) * 4;
+        var r = imageData[offset];
+        var g = imageData[offset + 1];
+        var b = imageData[offset + 2];
+        // HSL - lightness:
+        // return (Math.max(r,g,b) + Math.min(r,g,b)) / 2
+        // HSV - value:
+        return Math.max(r,g,b) / 255 * 100;
+      }
+
+
+      function setPixelValue(x, y, val) {
+        var offset = (x + y * width) * 4;
+        var r = (val >> 16) & 255;
+        var g = (val >> 8) & 255;
+        var b = val & 255;
+        imageData[offset] = r;
+        imageData[offset+1] = g;
+        imageData[offset+2] = b;
+      }
+
+      function getPixelValue(x, y) {
+        var offset = (x + y * width) * 4;
+        var r = imageData[offset];
+        var g = imageData[offset + 1];
+        var b = imageData[offset + 2];
+
+        return ( ((255 << 8) | r) << 8 | g) << 8 | b;
+      }
+
+
+      function getFirstBrightX(_x, _y) {
+        var x = _x;
+        var y = _y;
+        while(getPixelBrightness(x, y) < brightnessValue) {
+          x++;
+          if(x >= width) return -1;
+        }
+        return x;
+      }
+
+      function getNextDarkX(_x, _y) {
+        var x = _x+1;
+        var y = _y;
+        while(getPixelBrightness(x, y) > brightnessValue) {
+          x++;
+          if(x >= width) return width-1;
+        }
+        return x-1;
+      }
+
+
+      while(xend < width-1) {
+        x = getFirstBrightX(x, y);
+        xend = getNextDarkX(x, y);
+
+        if (x < 0) break;
+
+
+        var sortLength = xend-x;
+
+        var unsorted = new Array(sortLength);
+        var sorted = new Array(sortLength);
+
+        for(var i=0; i<sortLength; i++) {
+          unsorted[i] = getPixelValue(x + i, y);
+        }
+
+        sorted = unsorted.sort();
+
+        for(var i=0; i<sortLength; i++) {
+          setPixelValue(x + i, y, sorted[i]);
+        }
+
+
+        x = xend+1;
+      }
+    }
+
+
+
+    ctx.putImageData(canvasData, 0, 0);
+
+  }
+
+
   return {
     ghost: ghost,
     contrast: contrast,
@@ -504,6 +614,7 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     bend: bend,
     border: border,
     drawImage: drawImage,
+    pixelSort: pixelSort,
     updateImage: updateImage
   };
 };

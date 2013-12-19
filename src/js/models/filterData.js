@@ -228,6 +228,10 @@ app.filterData = new FilterData([
   },
 
   {
+    'name': 'pixelSort'
+  },
+
+  {
     'name': 'ghost',
     'options': [
       {
