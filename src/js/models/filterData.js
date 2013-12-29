@@ -228,7 +228,32 @@ app.filterData = new FilterData([
   },
 
   {
-    'name': 'pixelSort'
+    'name': 'pixelSort',
+    'options': [
+      {
+        'name': 'mode',
+        'type':'checkbox',
+        'value': false
+      },
+      {
+        'name': 'amount',
+        'type':'range',
+        'value': 1,
+        'min': 0,
+        'max': 3,
+        'step': 0.1
+      },
+      {
+        'name': 'horizontal',
+        'type':'checkbox',
+        'value': true
+      },
+      {
+        'name': 'vertical',
+        'type':'checkbox',
+        'value': false
+      }
+    ]
   },
 
   {
