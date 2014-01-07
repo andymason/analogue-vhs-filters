@@ -22,7 +22,8 @@ app.AppView = Backbone.View.extend({
 
   events: {
     'click #filter_selection_add' : 'addFilter',
-    'click #filter_example_load'  : 'addExample'
+    'click #filter_example_load'  : 'addExample',
+    'click #filter_clear'         : 'clearFilters'
   },
 
   addExampleOption: function(example, exampleID) {
@@ -57,6 +58,11 @@ app.AppView = Backbone.View.extend({
       app.FilterCollectionView.updateOutput();
     }
 
+  },
+
+  clearFilters: function() {
+    app.FilterCollection.reset();
+    app.FilterCollectionView.updateOutput();
   },
 
   insertFilter: function(filterName, options, preventViewUpdate) {

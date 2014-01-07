@@ -36,7 +36,8 @@ app.FilterItemView = Backbone.View.extend({
   },
 
   toggleView: function() {
-    this.$el.toggleClass('closed');
+    $('.filter').toggleClass('closed', true);
+    this.$el.toggleClass('closed', false);
   },
 
   update: _.debounce(function(event) {
@@ -69,6 +70,7 @@ app.FilterItemView = Backbone.View.extend({
   addInput: function(option) {
     var $view = $(this.inputTemplate({ option: option }));
     this.$inputWrapper.append($view);
+    this.toggleView();
   },
 
   render: function() {

@@ -62,6 +62,11 @@ body {
   cursor: pointer;
 }
 
+
+.filter.closed:hover {
+  background: #999;
+}
+
 .filter.closed .inputs_wrapper {
   display: none;
 }
@@ -117,6 +122,11 @@ body {
 .move_button {
   position: absolute;
   cursor: pointer;
+  font-size: 11px;
+}
+
+.move_button:hover {
+  background-color: red;
 }
 
 .move_down {
