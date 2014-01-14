@@ -9,6 +9,7 @@ var FilterCollectionView = Backbone.View.extend({
     this.collection.on('add', this.addFilterViewItem, this);
     this.collection.on('remove', this.updateOutput, this);
     this.collection.on('change', this.updateOutput, this);
+    this.collection.on('render', this.renderOutput, this);
     this.collection.on('reset', this.empty, this);
   },
 
@@ -33,8 +34,48 @@ var FilterCollectionView = Backbone.View.extend({
     analogue.drawImage();
     console.log('update output');
     this.collection.each(function(model) {
-      model.triggerOutput();
+      model.triggerOutput(analogue);
     });
+  },
+
+  renderOutput: function(m, options) {
+    var tmpCanvas = document.createElement('canvas');
+    tmpCanvas.width = 1000;
+    tmpCanvas.height = 1000;
+    var tmpDraw = new Analogue(tmpCanvas, img);
+    tmpDraw.drawImage();
+    console.log('update output');
+    this.collection.each(function(model) {
+      model.triggerOutput(tmpDraw);
+    });
+
+    //var tmpImg = document.createElement('img');
+    var clientId = 'cd5ead822feb886';
+    var dataURL = tmpCanvas.toDataURL('image/jpg');
+    dataURL = dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
+
+    $.ajax({
+        url: 'https://api.imgur.com/3/image',
+        type: 'post',
+        headers: {
+            'Authorization': 'Client-ID ' + clientId
+        },
+        data: {
+            type: 'base64',
+            name: 'glitch-name',
+            title: 'glitch-title',
+            description: 'Glitch description goes here',
+            image: dataURL
+        },
+        dataType: 'json',
+        success: function(response) {
+            if(response.success) {
+                console.log(response);
+            }
+        }
+    });
+
+
   },
 
   empty: function() {

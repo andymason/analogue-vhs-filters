@@ -68,7 +68,6 @@ app.FilterItemView = Backbone.View.extend({
     }
 
     op[modelOption] = value;
-    console.log($input, op);
     this.model.set(op);
   }, 300),
 
