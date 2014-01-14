@@ -541,7 +541,7 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
           default:
             break;
         }
-        
+
         if (x < 0) break;
 
         var sortLength = xend-x;
@@ -568,7 +568,7 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
         var x = column;
         var y = 0;
         var yend = 0;
-        
+
         while(yend < height-1) {
           switch(mode) {
             case 0:
@@ -586,24 +586,24 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
             default:
               break;
           }
-          
+
           if (y < 0) break;
-          
+
           var sortLength = yend-y;
-          
+
           var unsorted = new Array(sortLength);
           var sorted = new Array(sortLength);
-          
+
           for(var i=0; i<sortLength; i++) {
             unsorted[i] = getPixelValue(x, y+i);
           }
-          
+
           sorted = unsorted.sort();
-          
+
           for(var i=0; i<sortLength; i++) {
             setPixelValue(x, y+i, sorted[i]);
           }
-          
+
           y = yend+1;
         }
     }

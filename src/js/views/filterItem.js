@@ -8,7 +8,7 @@ app.FilterItemView = Backbone.View.extend({
   events: {
     'click': 'toggleView',
     'click .remove':    'destroy',
-    'change input':     'update',
+    'change .input':     'update',
     'click .move_up':   'moveUp',
     'click .move_down': 'moveDown'
   },
@@ -59,11 +59,16 @@ app.FilterItemView = Backbone.View.extend({
       value = parseFloat($input.val());
     }
 
+    if ($input.attr('type') === 'select') {
+      value = parseInt($input.val(), 10);
+    }
+
     if ($input.attr('type') === 'color' || $input.attr('type') === 'text') {
       value = $input.val();
     }
 
     op[modelOption] = value;
+    console.log($input, op);
     this.model.set(op);
   }, 300),
 

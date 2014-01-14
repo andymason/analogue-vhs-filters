@@ -232,7 +232,12 @@ app.filterData = new FilterData([
     'options': [
       {
         'name': 'mode',
-        'type':'checkbox',
+        'type':'select',
+        'options': [
+          { 'name': 'Black', 'value': 0},
+          { 'name': 'Bright', 'value': 1},
+          { 'name': 'White', 'value': 2}
+        ],
         'value': false
       },
       {

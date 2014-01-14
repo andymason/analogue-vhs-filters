@@ -61,12 +61,21 @@
   <script type="text/template" id="template_input_field">
     <label class="filter_input">
       <span class="option_name"><%= option.name %></span>
-      <input
-      <% _.each(option, function(value, key) { %>
-      <%= key %>="<%= value %>"
-      <% if (value === true) { %> checked <% } %>
-      <% }); %>
-      >
+
+      <% if (option.type === 'select') { %>
+          <select class="input" name="<%= option.name %>" type="select">
+          <% _.each(option.options, function(selOpt, i) { %>
+            <option value="<%= selOpt.value %>"><%= selOpt.name %></option>
+          <% }); %>
+          </select>
+      <% } else { %>
+        <input class="input"
+        <% _.each(option, function(value, key) { %>
+          <%= key %>="<%= value %>"
+          <% if (value === true) { %> checked <% } %>
+          <% }); %>
+        >
+      <% } %>
     </label>
   </script>
 
