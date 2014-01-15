@@ -9,9 +9,6 @@ Feature wish list
 -----------------
 * RGB LED image overlays, tile x/y (MAME has RGB images)
 * JPEG corruption
-* Import image from local FS
-* Export large image (specify dimensions)
-* Click & touch drag to generate distortion (per filter?)
 * Web cam import
 * Tilt shift blur
 * Import image from URL (needs base64 image proxy. Use GAE?)
@@ -21,6 +18,9 @@ Feature wish list
 Done list
 ---------
 * Upload to 3rd party host (imgur?)
+* Import image from local FS
+* Export large image (specify dimensions)
+* Click & touch drag to generate distortion (per filter?)
 
 
 Not going to do
@@ -28,3 +28,9 @@ Not going to do
 * Mobile version
 * WebGl optimised
 * Animated gif
+
+
+Credits
+-------
+RGB and scanline image tiles: SDLMame
+

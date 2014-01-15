@@ -14,17 +14,30 @@ app.SourceInput = Backbone.View.extend({
   },
 
   events: {
-    'click .source_update': 'updateSource'
+    'click .source_update': 'updateSource',
+    'change #local_image': 'handleLocalImage'
   },
 
   updateSource: function() {
     this.model.set('sourceUrl', this.$sourceUrl.val());
   },
 
+  handleLocalImage: function(e) {
+    var reader = new FileReader();
+    reader.onload = function(event){
+        img.onload = function(event) {
+          analogue.updateImage(this);
+          app.FilterCollectionView.updateOutput();
+        }
+        img.src = event.target.result;
+      }
+
+    reader.readAsDataURL(e.target.files[0]);
+  },
+
   updateImage: function() {
     var photo = new Image();
-    photo.addEventListener('load', function() {
-      console.log(this);
+    photo.addEventListener('load', function() {;
       analogue.updateImage(this);
       app.FilterCollectionView.updateOutput();
 
@@ -32,8 +45,6 @@ app.SourceInput = Backbone.View.extend({
     photo.setAttribute('src', this.model.get('sourceUrl'));
 
     this.$sourceImg.attr('src', photo.src);
-
-
   }
 
 });
