@@ -7,12 +7,15 @@ Uses navative JavaScript without WebGL so is CPU intensive and slow.
 
 Feature wish list
 -----------------
+* RGB LED image overlays, tile x/y (MAME has RGB images)
+
 * Import image from local FS
 * Export large image (specify dimensions)
 * Click & touch drag to generate distortion (per filter?)
 * Web cam import
 * Tilt shift blur
 * Import image from URL (needs base64 image proxy. Use GAE?)
+* Image layer with conposite effects
 
 
 Done list

@@ -24,7 +24,8 @@ app.AppView = Backbone.View.extend({
     'click #filter_selection_add' : 'addFilter',
     'click #filter_example_load'  : 'addExample',
     'click #filter_clear'         : 'clearFilters',
-    'click #render'               : 'renderFilters'
+    'click #render'               : 'renderFilters',
+    'click #export_settings'      : 'exportSettings'
   },
 
   addExampleOption: function(example, exampleID) {
@@ -64,6 +65,23 @@ app.AppView = Backbone.View.extend({
   clearFilters: function() {
     app.FilterCollection.reset();
     app.FilterCollectionView.updateOutput();
+  },
+
+  exportSettings: function() {
+    var settings = {
+      'title' : 'Exported settings',
+      'filters': []
+    };
+    app.FilterCollection.each(function(model) {
+      var settingOption = { name: model.get('name'), options: {} };
+      model.get('options').forEach(function(option) {
+        settingOption.options[option.name] = option.value;
+      });
+
+      settings.filters.push(settingOption);
+    });
+
+    console.log(JSON.stringify(settings, null, '  '));
   },
 
   insertFilter: function(filterName, options, preventViewUpdate) {
