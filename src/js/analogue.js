@@ -9,6 +9,21 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
   var ctx = canvas.getContext('2d');
   var width = parseInt(canvas.width, 10);
   var height = parseInt(canvas.height, 10);
+  var scanImg = new Image();
+  scanImg.src = 'img/tiles/scanrez2.png';
+
+  var scan2Img = new Image();
+  scan2Img.src = 'img/tiles/aperture.png';
+
+  var scan3Img = new Image();
+  scan3Img.src = 'img/tiles/aperture1x2rb.png';
+
+  var scan4Img = new Image();
+  scan4Img.src = 'img/tiles/scanrez2.png';
+
+  ctx.imageSmoothingEnabled = false;
+  
+
 
 
   var sandboxCanvas = document.createElement('canvas');
@@ -261,8 +276,26 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     if (imgData) { ctx.putImageData(imgData, 0, 0); }
 	}
 
+  function leds() {
+    var ledWidth = 12;
+    var ledHeight = 4;
+    var ledColCount = Math.ceil(width / ledWidth);
+    var ledRowCount = Math.ceil(height / ledHeight);
 
-  function leds(ledWidth, borderWidth, borderOpacity, fuzzyLines, rgbCells) {
+     ctx.globalCompositeOperation = 'multiply';
+    ctx.globalAlpha = 1;
+    for (var row = -1; row < ledRowCount; row++) {
+      for (var col = 0; col < ledColCount; col++) {
+        ctx.drawImage(scan4Img, ledWidth * col, ledHeight * row);
+      }
+    }
+
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+
+  function ledsOLD(ledWidth, borderWidth, borderOpacity, fuzzyLines, rgbCells) {
     var borderWidth = borderWidth || 1;
     var borderOffset = (fuzzyLines) ? 0 : borderWidth / 2;
     var ledWidth = ledWidth || 4;
