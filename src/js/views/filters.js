@@ -3,14 +3,38 @@ var app = app || {};
 var FilterCollectionView = Backbone.View.extend({
   tagName: 'div',
   id: 'activeFilters',
+  className: 'ui-sortable',
   collection: app.FilterCollection,
+
+  events: {
+    'update-sort': 'updateSort'
+  },
 
   initialize: function() {
     this.collection.on('add', this.addFilterViewItem, this);
     this.collection.on('remove', this.updateOutput, this);
-    this.collection.on('change', this.updateOutput, this);
+    this.collection.on('update', this.updateOutput, this);
+    //this.collection.on('change', this.updateOutput, this);
     this.collection.on('render', this.renderOutput, this);
     this.collection.on('reset', this.empty, this);
+  },
+
+  updateSort: function(event, model, position) {
+    console.log(event, model, position);
+    this.collection.remove(model, { silent: true });
+
+    this.collection.each(function (model, index) {
+      var ordinal = index;
+      if (index >= position)
+          ordinal += 1;
+      model.set('ordinal', ordinal);
+    });
+
+    model.set('ordinal', position);
+    this.collection.add(model, {at: position});
+
+    //this.updateOutput();
+    console.log('in here');
   },
 
   addFilterViewItem: function(model, collection, options) {
@@ -40,18 +64,31 @@ var FilterCollectionView = Backbone.View.extend({
 
   renderOutput: function(m, options) {
     var tmpCanvas = document.createElement('canvas');
-    tmpCanvas.width = 1000;
-    tmpCanvas.height = 1000;
+    var resolution = $('#resolution').val().split('x');
+    tmpCanvas.width = parseInt(resolution[0], 10);
+    tmpCanvas.height = parseInt(resolution[1], 10);
+
+    var destination = $('#destination').val();
+
     var tmpDraw = new Analogue(tmpCanvas, img);
     tmpDraw.drawImage();
-    console.log('update output');
     this.collection.each(function(model) {
       model.triggerOutput(tmpDraw);
     });
 
+    var dataURL = tmpCanvas.toDataURL('image/jpg');
+
+    if (destination === 'imgur')
+      this.imgurUpload(dataURL);
+    else
+      window.open(dataURL);
+
+  },
+
+  imgurUpload: function(_dataURL) {
     //var tmpImg = document.createElement('img');
     var clientId = 'cd5ead822feb886';
-    var dataURL = tmpCanvas.toDataURL('image/jpg');
+    var dataURL = _dataURL;
     dataURL = dataURL.replace(/^data:image\/(png|jpg);base64,/, '');
 
     $.ajax({
@@ -59,23 +96,22 @@ var FilterCollectionView = Backbone.View.extend({
         type: 'post',
         headers: {
             'Authorization': 'Client-ID ' + clientId
-        },
-        data: {
+          },
+          data: {
             type: 'base64',
             name: 'glitch-name',
             title: 'glitch-title',
             description: 'Glitch description goes here',
             image: dataURL
-        },
-        dataType: 'json',
-        success: function(response) {
-            if(response.success) {
+          },
+          dataType: 'json',
+          success: function(response) {
+              if(response.success) {
                 console.log(response);
+                window.open('http://imgur.com/gallery/' + response.data.id);
+              }
             }
-        }
-    });
-
-
+        });
   },
 
   empty: function() {

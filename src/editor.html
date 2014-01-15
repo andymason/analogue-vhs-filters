@@ -40,6 +40,24 @@
           <select id="filter_examples"></select>
           <button id="filter_example_load">Load effect</button>
           <button id="filter_clear">Clear effects</button>
+
+          <select id="destination">
+            <option value="local">New window</option>
+            <option value="imgur">imgur upload</option>
+          </select>
+
+          <select id="resolution">
+            <option value="320x200">320x200 (C64)</option>
+            <option value="320x256">320x256 (Amiga PAL)</option>
+            <option value="320x512">320x512 (Amiga laced PAL)</option>
+            <option value="640x256">640x256 (Amiga High-res PAL)</option>
+            <option value="640x512">640x512 (Amiga High-res laced PAL)</option>
+            <option value="640x480">640x480</option>
+            <option value="800x600">800x600</option>
+            <option value="1024x768">1024x768</option>
+            <option value="1080x720">1080x720</option>
+            <option value="1920x1080">1920x1080</option>
+          </select>
           <button id="render">Render</button>
       </div>
 
@@ -81,6 +99,7 @@
   </script>
 
   <script src="js/libs/jquery-2.0.3.min.js"></script>
+  <script src="js/libs/jquery-ui-1.10.3.custom.min.js"></script>
   <script src="js/libs/underscore.js"></script>
   <script src="js/libs/backbone.js"></script>
   <script src="js/libs/deep-model.backbone.js"></script>

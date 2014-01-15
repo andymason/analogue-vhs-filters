@@ -96,6 +96,14 @@ app.AppView = Backbone.View.extend({
 
   render: function() {
     this.$activeFilters.append(app.FilterCollectionView.render().$el);
+
+    $('#activeFilters').sortable({
+        stop: function(event, ui) {
+            ui.item.trigger('drop', ui.item.index());
+        }
+    });
+
+
   }
 
 });

@@ -10,7 +10,8 @@ app.FilterItemView = Backbone.View.extend({
     'click .remove':    'destroy',
     'change .input':     'update',
     'click .move_up':   'moveUp',
-    'click .move_down': 'moveDown'
+    'click .move_down': 'moveDown',
+    'drop': 'drop'
   },
 
 
@@ -25,6 +26,10 @@ app.FilterItemView = Backbone.View.extend({
     console.log('model view destory');
     app.FilterCollection.remove(this.model);
     this.remove();
+  },
+
+  drop: function(event, index) {
+    this.$el.trigger('update-sort', [this.model, index]);
   },
 
   moveUp: function() {
@@ -69,6 +74,7 @@ app.FilterItemView = Backbone.View.extend({
 
     op[modelOption] = value;
     this.model.set(op);
+    this.model.collection.trigger('update');
   }, 300),
 
   addInput: function(option) {

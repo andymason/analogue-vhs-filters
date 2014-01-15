@@ -1,0 +1,27 @@
+Analogue VHS Filters
+====================
+
+Create glitched and distorted images by manipulating canvas data array.
+Uses navative JavaScript without WebGL so is CPU intensive and slow.
+
+
+Feature wish list
+-----------------
+* Import image from local FS
+* Export large image (specify dimensions)
+* Click & touch drag to generate distortion (per filter?)
+* Web cam import
+* Tilt shift blur
+* Import image from URL (needs base64 image proxy. Use GAE?)
+
+
+Done list
+---------
+* Upload to 3rd party host (imgur?)
+
+
+Not going to do
+---------------
+* Mobile version
+* WebGl optimised
+* Animated gif
