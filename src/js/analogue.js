@@ -3,26 +3,32 @@
  * Display distortions.
  */
 
+
+/* FIXME: Only load assets once. Doing it again on render causes a re-downlad
+          and a width, height 0 as image hasn't finished downloading.
+*/
+ var scanImg = new Image();
+scanImg.src = 'img/tiles/scanrez2.png';
+
+var scan1Img = new Image();
+scan1Img.src = 'img/tiles/aperture.png';
+
+var scan2Img = new Image();
+scan2Img.src = 'img/tiles/aperture1x2rb.png';
+
+var scan3Img = new Image();
+scan3Img.src = 'img/tiles/scanrez2.png';
+
+
 var Analogue = Analogue || function(srcCanvas, srcImg) {
   var canvas = srcCanvas;
   var img = srcImg;
   var ctx = canvas.getContext('2d');
   var width = parseInt(canvas.width, 10);
   var height = parseInt(canvas.height, 10);
-  var scanImg = new Image();
-  scanImg.src = 'img/tiles/scanrez2.png';
-
-  var scan2Img = new Image();
-  scan2Img.src = 'img/tiles/aperture.png';
-
-  var scan3Img = new Image();
-  scan3Img.src = 'img/tiles/aperture1x2rb.png';
-
-  var scan4Img = new Image();
-  scan4Img.src = 'img/tiles/scanrez2.png';
 
   ctx.imageSmoothingEnabled = false;
-  
+
 
 
 
@@ -276,95 +282,54 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     if (imgData) { ctx.putImageData(imgData, 0, 0); }
 	}
 
-  function leds() {
-    var ledWidth = 12;
-    var ledHeight = 4;
+  function leds(_img, _scale, _composite, _opacity) {
+    var img = scanImg;
+    switch (_img) {
+      case(0):
+        img = scanImg;
+        break;
+      case(1):
+        img = scan1Img;
+        break;
+      case(2):
+        img = scan2Img;
+        break;
+      case(3):
+        img = scan3Img;
+        break;
+      default:
+        img = scanImg;
+        break;
+    }
+
+    var scale = _scale || 1;
+    var alpha = _opacity || 1;
+    var composit = _composite || 'multiply';
+
+
+    var ledWidth = img.width * scale;
+    var ledHeight = img.height * scale;
+
+
     var ledColCount = Math.ceil(width / ledWidth);
     var ledRowCount = Math.ceil(height / ledHeight);
 
-     ctx.globalCompositeOperation = 'multiply';
-    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = composit;
+    ctx.globalAlpha = alpha;
     for (var row = -1; row < ledRowCount; row++) {
       for (var col = 0; col < ledColCount; col++) {
-        ctx.drawImage(scan4Img, ledWidth * col, ledHeight * row);
+        ctx.drawImage(
+          img,
+          ledWidth * col,
+          ledHeight * row,
+          ledWidth,
+          ledHeight
+        );
       }
     }
 
     ctx.globalAlpha = 1;
     ctx.globalCompositeOperation = 'source-over';
-  }
-
-
-  function ledsOLD(ledWidth, borderWidth, borderOpacity, fuzzyLines, rgbCells) {
-    var borderWidth = borderWidth || 1;
-    var borderOffset = (fuzzyLines) ? 0 : borderWidth / 2;
-    var ledWidth = ledWidth || 4;
-    var ledHeight = Math.ceil(ledWidth * 1.2);
-    var ledColCount = Math.ceil(width / ledWidth);
-    var ledRowCount = Math.ceil(height / ledHeight);
-
-
-    ctx.strokeStyle = 'rgba(0, 0, 0, ' + (borderOpacity || 0.8) + ')';
-    ctx.lineWidth = borderWidth;
-
-    for (var row = -1; row < ledRowCount; row++) {
-      for (var i = 0; i < ledColCount; i++) {
-          //ctx.strokeRect(ledWidth * i, ledHeight * row, ledWidth * (i + 1), ledHeight * (row + 1));
-
-          //ctx.moveTo((ledWidth * i) + borderOffset, (ledHeight * row) + borderOffset);
-          //ctx.lineTo((ledWidth * i) + borderOffset, (ledHeight * (row + 1)) + borderOffset);
-          //ctx.moveTo((ledWidth * i) + borderOffset, (ledHeight * (row + 1)));
-          //ctx.lineTo((ledWidth * (i + 1)) + borderOffset, (ledHeight * (row + 1)));
-
-          var vertOffset = 0;
-          if ( i % 2 === 0) {
-            vertOffset = Math.floor(ledHeight / 2);
-          }
-
-
-        if (rgbCells) {
-          var ledInnerWidth = ledWidth - borderWidth;
-          //var ledCellWidth = Math.round(ledInnerWidth / 3);
-          var ledCellWidth = ledInnerWidth / 3;
-
-
-          ctx.globalCompositeOperation = 'lighter';
-
-          for (var c = 0; c < 3; c++) {
-
-            if (c === 0) { ctx.fillStyle = 'rgba(255, 0, 0, ' + (borderOpacity || 0.8) + ')'; }
-            else if (c === 1) { ctx.fillStyle = 'rgba(0, 255, 0, ' + (borderOpacity || 0.8) + ')'; }
-            else if (c === 2) { ctx.fillStyle = 'rgba(0, 0, 255, ' + (borderOpacity || 0.8) + ')'; }
-
-
-//            var xpos = Math.round((ledWidth * i) + (borderWidth/2) + ledCellWidth * c + borderOffset/2);
-//            var ypos = Math.round((ledHeight * row) + vertOffset + (borderWidth/2) + borderOffset/2);
-            var xpos = (ledWidth * i) + (borderWidth/2) + ledCellWidth * c + borderOffset/2;
-            var ypos = (ledHeight * row) + vertOffset + (borderWidth/2) + borderOffset/2;
-
-            ctx.fillRect(
-              xpos,
-              ypos,
-              ledCellWidth,
-              ledHeight
-            );
-          }
-
-          ctx.globalCompositeOperation = 'source-over';
-        }
-
-        ctx.beginPath();
-          ctx.moveTo((ledWidth * i) + borderOffset, (ledHeight * row) + borderOffset + vertOffset);
-          ctx.lineTo((ledWidth * i) + borderOffset, (ledHeight * (row + 1)) + borderOffset + vertOffset);
-
-          ctx.moveTo((ledWidth * i) + borderOffset, (ledHeight * (row + 1)) + borderOffset + vertOffset);
-          ctx.lineTo((ledWidth * (i + 1)) + borderOffset, (ledHeight * (row + 1)) + borderOffset + vertOffset);
-
-          ctx.closePath();
-          ctx.stroke();
-      }
-    }
-
   }
 
   function brightnessLines(alpha, yPos, height) {

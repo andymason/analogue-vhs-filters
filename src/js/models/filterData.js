@@ -299,37 +299,55 @@ app.filterData = new FilterData([
     'name': 'leds',
     'options': [
       {
-        'name': 'ledWidth',
-        'type':'range',
-        'value': 3,
-        'min': 1,
-        'max': 40,
-        'step': 1
+        'name': 'type',
+        'type':'select',
+        'options': [
+          { 'name': 'image 1', 'value': 0},
+          { 'name': 'image 2', 'value': 1},
+          { 'name': 'image 3', 'value': 2},
+          { 'name': 'image 3', 'value': 3}
+        ],
+        'value': 0
       },
       {
-        'name': 'borderWidth',
+        'name': 'scale',
         'type':'range',
-        'value': 1.3,
+        'value': 1,
+        'min': 1,
         'max': 10,
-        'step': 0.1
+        'step': 1
+      },
+
+      {
+        'name': 'composite',
+        'type':'select',
+        'options': [
+          { 'name': 'multiply', 'value': 'multiply'},
+          { 'name': 'screen', 'value': 'screen'},
+          { 'name': 'overlay', 'value': 'overlay'},
+          { 'name': 'darken', 'value': 'darken'},
+          { 'name': 'lighten', 'value': 'lighten'},
+          { 'name': 'color-dodge', 'value': 'color-dodge'},
+          { 'name': 'color-burn', 'value': 'color-burn'},
+          { 'name': 'hard-light', 'value': 'hard-light'},
+          { 'name': 'soft-light', 'value': 'soft-light'},
+          { 'name': 'difference', 'value': 'difference'},
+          { 'name': 'exclusion', 'value': 'exclusion'},
+          { 'name': 'hue', 'value': 'hue'},
+          { 'name': 'saturation', 'value': 'saturation'},
+          { 'name': 'color', 'value': 'color'},
+          { 'name': 'luminosity', 'value': 'luminosity'},
+          { 'name': 'normal', 'value': 'source-over'}
+        ],
+        'value': 'multiply'
       },
       {
         'name': 'opacity',
         'type':'range',
-        'value': 0.4,
+        'value': 0.8,
         'min': 0,
         'max': 1,
         'step': 0.01
-      },
-      {
-        'name': 'fuzzyLines',
-        'type':'checkbox',
-        'value': false
-      },
-      {
-        'name': 'rgbCells',
-        'type':'checkbox',
-        'value': false
       }
     ]
   },

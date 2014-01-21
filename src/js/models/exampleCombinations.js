@@ -24,6 +24,81 @@ app.exampleCombinations = {
     ]
   },
 
+  '3d_blues': {
+  "title": "3D blues",
+  "filters": [
+    {
+      "name": "pixelSort",
+      "options": {
+        "mode": 1,
+        "amount": 1.9,
+        "horizontal": true,
+        "vertical": false
+      }
+    },
+    {
+      "name": "noise",
+      "options": {
+        "amount": 10,
+        "colour": false
+      }
+    },
+    {
+      "name": "rgbShift",
+      "options": {
+        "distance": 2,
+        "interlaced": false
+      }
+    },
+    {
+      "name": "saturation",
+      "options": {
+        "saturation": -2.45
+      }
+    },
+    {
+      "name": "tint",
+      "options": {
+        "red": 0,
+        "green": 0,
+        "blue": 106
+      }
+    },
+    {
+      "name": "ghost",
+      "options": {
+        "x-offset": 20,
+        "y-offset": 0,
+        "alpha": 0.15,
+        "negative": true
+      }
+    },
+    {
+      "name": "colourBanding",
+      "options": {
+        "amount": 0.06,
+        "bandCount": 6
+      }
+    },
+    {
+      "name": "vignette",
+      "options": {
+        "alpha": 0.5,
+        "size": 0.21
+      }
+    },
+    {
+      "name": "leds",
+      "options": {
+        "type": 0,
+        "scale": 1,
+        "composite": "multiply",
+        "opacity": 0.68
+      }
+    }
+  ]
+},
+
   'red_shift' : {
     "title": "Red shift",
     "filters": [

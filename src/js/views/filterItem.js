@@ -65,7 +65,8 @@ app.FilterItemView = Backbone.View.extend({
     }
 
     if ($input.attr('type') === 'select') {
-      value = parseInt($input.val(), 10);
+      var tmpVal = $input.val();
+      value = (isNaN(tmpVal)) ? tmpVal : parseInt(tmpVal, 10);
     }
 
     if ($input.attr('type') === 'color' || $input.attr('type') === 'text') {

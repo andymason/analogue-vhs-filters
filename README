@@ -7,16 +7,21 @@ Uses navative JavaScript without WebGL so is CPU intensive and slow.
 
 Feature wish list
 -----------------
-* RGB LED image overlays, tile x/y (MAME has RGB images)
+* Render 100% CPU (drawImage)
 * JPEG corruption
+* Image layer with conposite effects
+* Progress bar
 * Web cam import
 * Tilt shift blur
 * Import image from URL (needs base64 image proxy. Use GAE?)
-* Image layer with conposite effects
+* Full credits
+
+
 
 
 Done list
 ---------
+* RGB LED image overlays, tile x/y (MAME has RGB images)
 * Upload to 3rd party host (imgur?)
 * Import image from local FS
 * Export large image (specify dimensions)
@@ -33,4 +38,6 @@ Not going to do
 Credits
 -------
 RGB and scanline image tiles: SDLMame
+Pixel sort JS
+
 
