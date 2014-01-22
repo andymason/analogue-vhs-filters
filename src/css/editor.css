@@ -23,6 +23,73 @@ input, button, select, option {
   font-size: 9px;
 }
 
+/* Desperate to remove focus outline in firefox */
+::-moz-focus-inner {
+  outline:0;
+}
+
+:focus {
+  outline:0;
+}
+
+input[type="range"]:focus {
+  outline: none !important;
+}
+
+.input {
+  margin: 0;
+}
+
+
+.input-text,
+.input-color {
+  background: #000;
+  border: 1px solid #FFF;
+  border-radius: 0;
+  color: #FFF;
+}
+
+.input-range {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  box-sizing: border-box;
+  background-clip: padding-box;
+  vertical-align: top;
+  outline: none;
+  /* -webkit-appearance: none; */
+  outline:0;
+}
+
+.input-range::-webkit-slider-thumb {
+  cursor: pointer;
+  background: red;
+  border-radius: 0;
+  border: none;
+  /* -webkit-appearance: none; */
+}
+
+
+.input-range::-moz-range-thumb {
+  cursor: pointer;
+  background: #FFF;
+  border-radius: 0;
+  border: none;
+  -webkit-appearance: none;
+  height: 6px;
+
+}
+
+.input-range::-moz-range-track {
+  border: 1px solid #FFF;
+  border-radius: 0;
+  background: black;
+  height: 8px;
+  outline:0;
+}
+
+
 .noscript {
   padding: 1rem;
   color: #FFF;

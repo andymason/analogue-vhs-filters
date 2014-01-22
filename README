@@ -7,10 +7,10 @@ Uses navative JavaScript without WebGL so is CPU intensive and slow.
 
 Feature wish list
 -----------------
-* Render 100% CPU (drawImage)
-* JPEG corruption
-* Image layer with conposite effects
+
+* Effect callbacks
 * Progress bar
+* Image layer with conposite effects
 * Web cam import
 * Tilt shift blur
 * Import image from URL (needs base64 image proxy. Use GAE?)
@@ -21,6 +21,8 @@ Feature wish list
 
 Done list
 ---------
+* JPEG corruption (Thanks to snorpey)
+* Render 100% CPU (drawImage)
 * RGB LED image overlays, tile x/y (MAME has RGB images)
 * Upload to 3rd party host (imgur?)
 * Import image from local FS
@@ -37,6 +39,7 @@ Not going to do
 
 Credits
 -------
+JPEG glitch https://github.com/snorpey/glitch-canvas
 RGB and scanline image tiles: SDLMame
 Pixel sort JS
 

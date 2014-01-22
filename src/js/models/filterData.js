@@ -28,6 +28,36 @@ app.filterData = new FilterData([
   },
 
   {
+    'name': 'jpegCorrupt',
+    'options': [
+      {
+        'name': 'amount',
+        'type':'range',
+        'value': 10,
+        'min': 0,
+        'max': 99,
+        'step': 1
+      },
+      {
+        'name': 'quality',
+        'type':'range',
+        'value': 70,
+        'min': 0,
+        'max': 99,
+        'step': 1
+      },
+      {
+        'name': 'iterations',
+        'type':'range',
+        'value': 10,
+        'min': 0,
+        'max': 99,
+        'step': 1
+      }
+    ]
+  },
+
+  {
     'name': 'vignette',
     'options': [
       {

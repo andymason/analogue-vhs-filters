@@ -93,7 +93,7 @@
           <% }); %>
           </select>
       <% } else { %>
-        <input class="input"
+        <input class="input input-<%= option.type %>"
         <% _.each(option, function(value, key) { %>
           <%= key %>="<%= value %>"
           <% if (value === true) { %> checked <% } %>
@@ -108,6 +108,10 @@
   <script src="js/libs/underscore.js"></script>
   <script src="js/libs/backbone.js"></script>
   <script src="js/libs/deep-model.backbone.js"></script>
+
+  <script src="js/libs/glitch-canvas.js"></script>
+
+
   <script src="js/analogue.js"></script>
   <script src="js/models/filter.js"></script>
   <script src="js/models/input.js"></script>

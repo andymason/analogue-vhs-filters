@@ -282,6 +282,22 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     if (imgData) { ctx.putImageData(imgData, 0, 0); }
 	}
 
+  function jpegCorrupt(_amount, _quality, _iterations) {
+      var parameters = {
+        amount: _amount || 10,
+        seed: 45,
+        iterations: _iterations || 20,
+        quality: _quality || 30
+      };
+
+      function drawGlitchedImageData(image_data) {
+          ctx.putImageData(image_data, 0, 0);
+          // FIXME: Add callback to continue filters
+      }
+
+      glitch(_getImageData(canvas), parameters, drawGlitchedImageData);
+  }
+
   function leds(_img, _scale, _composite, _opacity) {
     var img = scanImg;
     switch (_img) {
@@ -820,6 +836,7 @@ var Analogue = Analogue || function(srcCanvas, srcImg) {
     border: border,
     drawImage: drawImage,
     pixelSort: pixelSort,
+    jpegCorrupt: jpegCorrupt,
     updateImage: updateImage
   };
 };
