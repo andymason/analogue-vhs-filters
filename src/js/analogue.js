@@ -4,6 +4,84 @@
  */
 
 
+
+ /**
+  init:
+    canvas element
+    start Image
+
+  run:
+    filters array or single filter option
+    callback
+
+ */
+
+var GlitchFX = (function() {
+  var ledImages = [
+    'img/tiles/scanrez2.png',
+    'img/tiles/aperture.png',
+    'img/tiles/aperture1x2rb.png',
+    'img/tiles/scanrez2.png'
+  ];
+
+  // Load and store images
+  ledImages = ledImages.map(function(imgPath) {
+    var img = new Image();
+    img.src = imgPath;
+    return img;
+  });
+
+  var filters = {};
+
+  filters.sampleFilter = function(options, callback) {
+    console.log('test filter', options, this);
+    callback();
+  };
+
+  filters.secondFilter = function(options, callback) {
+    console.log('SECOND FILTER', options, this);
+    callback();
+  };
+
+  function init(_canvas, _startImg) {
+    this.canvas = _canvas;
+    this.ctx = _canvas + '-ctx';
+    this.startImg = _startImg;
+
+    return applyFilters.bind(this);
+  }
+
+  function applyFilters(filterCollection, _callback) {
+    var args = arguments;
+    var that = this;
+
+    function loopFilters() {
+      if (filterCollection.length === 0) {
+        _callback();
+        return;
+      }
+
+      var filterOpt = filterCollection.shift();
+      filters[filterOpt.name].call(that, filterOpt.options, loopFilters);
+    }
+
+    loopFilters();
+  }
+
+
+  return init;
+}());
+
+
+var test1 = new GlitchFX('canvas1', 'img1');
+test1([{name: 'sampleFilter', options: { height: 2, opacity: 0.3 } }, {name: 'secondFilter', options: {opacity: 1} }, {name: 'secondFilter', options: {opacity: 1} }], function() { console.log('test 1 finished'); });
+
+var test2 = new GlitchFX('canvas2', 'img2');
+test2([{name: 'sampleFilter', options: { height: 100, opacity: 1 } }], function() { console.log('test 2 finished'); });
+
+
+
+
 /* FIXME: Only load assets once. Doing it again on render causes a re-downlad
           and a width, height 0 as image hasn't finished downloading.
 */
