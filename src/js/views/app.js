@@ -5,6 +5,10 @@ var canvas = document.querySelector('#output');
 var analogue = new Analogue(canvas, img);
 analogue.drawImage();
 
+
+var glitchFX = new GlitchFX(canvas, img);
+
+
 app.AppView = Backbone.View.extend({
 
   el: '#editor',

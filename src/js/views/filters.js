@@ -56,10 +56,28 @@ var FilterCollectionView = Backbone.View.extend({
 
   updateOutput: function(m, options) {
     analogue.drawImage();
+
+
+    var filters = [];
     console.log('update output');
     this.collection.each(function(model) {
-      model.triggerOutput(analogue);
+      //model.triggerOutput(analogue);
+      var filter = {
+        name: model.get('name'),
+        options: {}
+      };
+
+      model.get('options').forEach(function(option) {
+        filter.options[option.name] = option.value;
+      });
+
+      filters.push(filter);
+
     });
+
+    console.log(filters);
+
+    glitchFX(filters, function() { console.log('finished'); });
   },
 
   renderOutput: function(m, options) {

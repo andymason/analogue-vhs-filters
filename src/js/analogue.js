@@ -17,6 +17,8 @@
  */
 
 var GlitchFX = (function() {
+  'use strict';
+
   var ledImages = [
     'img/tiles/scanrez2.png',
     'img/tiles/aperture.png',
@@ -31,53 +33,306 @@ var GlitchFX = (function() {
     return img;
   });
 
-  var filters = {};
-
-  filters.sampleFilter = function(options, callback) {
-    console.log('test filter', options, this);
-    callback();
-  };
-
-  filters.secondFilter = function(options, callback) {
-    console.log('SECOND FILTER', options, this);
-    callback();
-  };
-
-  function init(_canvas, _startImg) {
-    this.canvas = _canvas;
-    this.ctx = _canvas + '-ctx';
-    this.startImg = _startImg;
-
-    return applyFilters.bind(this);
+  function truncate(val) {
+    if (val < 0) return 0;
+    if (val > 255) return 255;
+    return val;
   }
 
-  function applyFilters(filterCollection, _callback) {
-    var args = arguments;
-    var that = this;
+  return function(_canvas, _startImg) {
+    var canvas = _canvas;
+    var ctx = canvas.getContext('2d');
+    var width = canvas.width;
+    var height = canvas.height;
+    var startImg = _startImg;
 
-    function loopFilters() {
-      if (filterCollection.length === 0) {
-        _callback();
-        return;
-      }
-
-      var filterOpt = filterCollection.shift();
-      filters[filterOpt.name].call(that, filterOpt.options, loopFilters);
+    function getImageData() {
+      return ctx.getImageData(0, 0, width, height);
     }
 
-    loopFilters();
-  }
+    var filters = {};
+
+    /**
+     * JPEG artifact corruption.
+     * @param  {object}   options
+     * @param  {function} callback
+     */
+    filters.jpegCorrupt = function(options, callback) {
+      var parameters = {
+        amount: (options) ? options.amount : 30,
+        iterations: (options) ? options.iterations : 20,
+        quality: (options) ? options.quality : 80,
+        seed: 45
+      };
+
+      function drawGlitchedImageData(image_data) {
+        ctx.putImageData(image_data, 0, 0);
+        callback();
+      }
+
+      glitch(getImageData(canvas), parameters, drawGlitchedImageData);
+    };
 
 
-  return init;
+    /**
+     * Add horizontal scanlines of varing brightness and vertical spaceing.
+     * @param  {object}   options
+     * @param  {function} callback
+     */
+    filters.scanlines = function(options, callback) {
+      var brightness = (brightness in options) ? options.brightness : 100;
+      var lineSpacing = (lineSpacing in options) ? options.lineSpacing : 2;
+      var imageData = getImageData();
+      var data = imageData.data;
+
+      for (var row = 0; row < height; row++) {
+        if (row % lineSpacing !== 0) continue;
+        for (var col = 0; col < width; col++) {
+            var i = (col + (row * width)) * 4;
+            data[i] = truncate(data[i] + brightness);
+            data[i + 1] = truncate(data[i + 1] + brightness);
+            data[i + 2] = truncate(data[i + 2] + brightness);
+        }
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      callback();
+    };
+
+    /**
+     * Vignette the canvas surroundings.
+     * @param  {object}   options
+     * @param  {function} callback
+     */
+    filters.vignette = function(options, callback) {
+      console.log(options);
+      var radius = ('size' in options) ? height/ (1 + options.size) : height;
+      var vignetteAlpha = ('alpha' in options) ? options.alpha : 1;
+      ctx.globalCompositeOperation = 'darker';
+
+      // create radial gradient
+      var grd = ctx.createRadialGradient(
+        width/2, height/2, height/2, width/2, height/2, radius
+      );
+      grd.addColorStop(0, 'rgba(0, 0, 0, 0');
+      grd.addColorStop(1, 'rgba(0, 0, 0, ' + vignetteAlpha + ')');
+      ctx.fillStyle = grd;
+      ctx.fillRect(0, 0, width, height);
+      ctx.globalCompositeOperation = 'source-over';
+      callback();
+    };
+
+
+    /**
+     * Ghost image
+     * @param  {object}   options
+     * @param  {function} callback
+     */
+    filters.ghost = function(options, callback) {
+      var xShift = options['x-offset'] || 30;
+      var yShift = options['y-offset'] || 10;
+      var alpha = options.alpha || 0.4;
+
+      ctx.globalAlpha = alpha;
+      ctx.globalCompositeOperation = 'multiply';
+      ctx.drawImage(canvas, xShift, yShift, width, height);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1;
+      callback();
+    };
+
+
+    /**
+     * Alter image data contrast level.
+     * @param  {object}   options
+     * @param  {function} callback
+     *
+     * Source: http://stackoverflow.com/a/18495093
+     */
+    filters.contrast = function(options, callback) {
+      var contrast = options.contrast || 100;
+      var imageData = getImageData();
+      var data = imageData.data;
+      var factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+
+      for(var i=0; i<data.length; i+=4) {
+        data[i] = (factor * ((data[i] - 128) + 128));
+        data[i+1] = (factor * ((data[i+1] - 128) + 128));
+        data[i+2] = (factor * ((data[i+2] - 128) + 128));
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      callback();
+    };
+
+
+    /**
+     * Change brighness.
+     * @param  {object}   options
+     * @param  {function} callback
+     */
+    filters.brightness = function(options, callback) {
+      var brightnessVal = options.brightness || 100;
+      var imageData = getImageData();
+      var data = imageData.data;
+
+      for (var i = 0; i < data.length; i += 4) {
+        data[i] = truncate(data[i] + brightnessVal);
+        data[i + 1] = truncate(data[i + 1] + brightnessVal);
+        data[i + 2] = truncate(data[i + 2] + brightnessVal);
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      callback();
+    };
+
+
+    /**
+     * Convert to greyscale.
+     * @param  {object}   options
+     * @param  {function} callback
+     */
+    filters.greyscale = function(options, callback){
+      var imageData = getImageData();
+      var data = imageData.data;
+
+      for (var i = 0; i < data.length; i += 4) {
+        var meanVal = +((data[i] + data[i + 1] + data[i + 2]) / 3);
+        data[i] = meanVal;
+        data[i + 1] = meanVal;
+        data[i + 2] = meanVal;
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      callback();
+    };
+
+
+    /**
+     * Tint.
+     * @param  {object}   options
+     * @param  {function} callback
+     */
+    filters.tint = function(options, callback) {
+      var red = options.red || 200;
+      var green = options.green || 180;
+      var blue = options.blue || 220;
+      var imageData = getImageData();
+      var data = imageData.data;
+
+      for (var i = 0; i < data.length; i += 4) {
+        data[i] = truncate(data[i] + red);
+        data[i + 1] = truncate(data[i + 1] + green);
+        data[i + 2] = truncate(data[i + 2] + blue);
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      callback();
+    };
+
+    /**
+     * Tint.
+     * @param  {object}   options
+     * @param  {function} callback
+     */
+    filters.saturation = function(options, callback) {
+      var saturationVal = options.saturation || 5;
+      var imageData = getImageData();
+      var data = imageData.data;
+
+      for (var i = 0; i < data.length; i+=4) {
+        var meanVal = +((data[i] + data[i + 1] + data[i + 2]) / 3);
+        data[i] = data[i] + ((data[i] - meanVal) * saturationVal);
+        data[i + 1] = data[i + 1] + ((data[i + 1] - meanVal) * saturationVal);
+        data[i + 2] = data[i + 2] + ((data[i + 2] - meanVal) * saturationVal);
+
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      callback();
+    };
+
+
+    /**
+     * Noise.
+     * @param  {options}   options
+     * @param  {function} callback
+     */
+    filters.noise = function(options, callback) {
+      var imageData = getImageData();
+      var data = imageData.data;
+      var noiseAmount = options.amount || 10;
+      var isColour = options.colour || false;
+      var randColour;
+
+      for (var i = 0; i < data.length; i += 4) {
+        var multiplier = (Math.random() > 0.5) ? -1 : 1;
+        if (isColour) {
+          randColour = Math.round((Math.random() * 2));
+          data[i] = truncate( (randColour === 0) ? (data[i] + noiseAmount ) : (data[i] - noiseAmount ) );
+          data[i + 1] = truncate( (randColour === 1) ? (data[i + 1] + noiseAmount ) :(data[i+1] - noiseAmount ) );
+          data[i + 2] = truncate( (randColour === 2) ? (data[i + 2] + noiseAmount ) : (data[i+2] - noiseAmount ) );
+        } else {
+          data[i] = truncate( data[i] + noiseAmount * multiplier );
+          data[i + 1] = truncate( data[i + 1] + noiseAmount * multiplier );
+          data[i + 2] = truncate( data[i + 2] + noiseAmount * multiplier );
+        }
+      }
+
+      ctx.putImageData(imageData, 0, 0);
+      callback();
+    };
+
+    /**
+     * Downsample.
+     * @param  {object}   options
+     * @param  {function} callback
+     */
+    filters.downsample = function(options, callback) {
+      var factor = options.amount || 2;
+      var xScale = width / factor;
+      var yScale = height / factor;
+
+      ctx.drawImage(canvas, 0, 0, width, height, 0, 0, xScale, yScale);
+      ctx.drawImage(canvas, 0, 0, xScale, yScale, 0, 0, width, height);
+      callback();
+    }
+
+
+    function applyFilters(filterCollection, callback) {
+      function loopFilters() {
+        if (filterCollection.length === 0)
+          return callback();
+
+        var filterOpt = filterCollection.shift();
+        filterOpt.options = filterOpt.options || {};
+
+        if (filterOpt.name in filters) {
+          filters[filterOpt.name](filterOpt.options, loopFilters);
+        } else {
+          loopFilters();
+        }
+      }
+
+      loopFilters();
+    }
+
+    return applyFilters;
+  };
+
 }());
 
 
-var test1 = new GlitchFX('canvas1', 'img1');
-test1([{name: 'sampleFilter', options: { height: 2, opacity: 0.3 } }, {name: 'secondFilter', options: {opacity: 1} }, {name: 'secondFilter', options: {opacity: 1} }], function() { console.log('test 1 finished'); });
 
-var test2 = new GlitchFX('canvas2', 'img2');
-test2([{name: 'sampleFilter', options: { height: 100, opacity: 1 } }], function() { console.log('test 2 finished'); });
+
+
+
+// var test1 = new GlitchFX('canvas1', 'img1');
+// test1([{name: 'sampleFilter', options: { height: 2, opacity: 0.3 } }, {name: 'secondFilter', options: {opacity: 1} }, {name: 'secondFilter', options: {opacity: 1} }], function() { console.log('test 1 finished'); });
+
+// var test2 = new GlitchFX('canvas2', 'img2');
+// test2([{name: 'sampleFilter', options: { height: 100, opacity: 1 } }], function() { console.log('test 2 finished'); });
+// test1([{name: 'sampleFilter', options: { height: 2, opacity: 0.3 } }, {name: 'secondFilter', options: {opacity: 1} }, {name: 'secondFilter', options: {opacity: 1} }], function() { console.log('test 1 finished'); });
 
 
 

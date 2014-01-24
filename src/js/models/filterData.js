@@ -150,10 +150,10 @@ app.filterData = new FilterData([
   },
 
   {
-    'name': 'upScale',
+    'name': 'downsample',
     'options': [
       {
-        'name': 'upScale',
+        'name': 'amount',
         'type':'range',
         'value': 2,
         'min': 1,
