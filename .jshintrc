@@ -1,6 +1,6 @@
 {
   "bitwise"       : true,     
-  "curly"         : true,     
+  "curly"         : false,     
   "eqeqeq"        : true,     
   "forin"         : true,     
   "immed"         : true,     
@@ -9,7 +9,7 @@
   "noarg"         : true,     
   "noempty"       : true,     
   "nonew"         : true,     
-  "plusplus"      : true,     
+  "plusplus"      : false,     
   "regexp"        : true,     
   "undef"         : true,     
   "strict"        : false,
@@ -23,5 +23,5 @@
     "Backbone": true
   },
 
-  "indent"        : 2
+  "indent"        : 4
 }
