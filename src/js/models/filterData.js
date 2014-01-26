@@ -258,6 +258,36 @@ app.filterData = new FilterData([
   },
 
   {
+    'name': 'dithering',
+    'options': [
+      {
+        'name': 'type',
+        'type':'select',
+        'options': [
+          { 'name': 'None', 'value': 'none'},
+          { 'name': 'Bayer', 'value': 'bayer'},
+          { 'name': 'floydsteinberg', 'value': 'floydsteinberg'},
+          { 'name': 'Bill Atkinson', 'value': false},
+        ],
+        'value': 'bayer'
+      },
+      {
+        'name': 'threshold',
+        'type':'range',
+        'value': 131,
+        'min': 0,
+        'max': 255,
+        'step': 1
+      },
+      {
+        'name': 'monochrome',
+        'type':'checkbox',
+        'value': true
+      },
+    ]
+  },
+
+  {
     'name': 'pixelSort',
     'options': [
       {

@@ -53,9 +53,9 @@ var GlitchFX = (function() {
          */
         filters.jpegCorrupt = function(options, callback) {
             var parameters = {
-                amount: (options) ? options.amount : 30,
-                iterations: (options) ? options.iterations : 20,
-                quality: (options) ? options.quality : 80,
+                amount: (options) ? options.amount : 0,
+                iterations: (options) ? options.iterations : 0,
+                quality: (options) ? options.quality : 100,
                 seed: 45
             };
 
@@ -74,8 +74,9 @@ var GlitchFX = (function() {
          * @param  {function} callback
          */
         filters.scanlines = function(options, callback) {
-            var brightness = (brightness in options) ? options.brightness : 100;
-            var lineSpacing = (lineSpacing in options) ? options.lineSpacing : 2;
+            console.log(options);
+            var brightness = options.brightness || 0;
+            var lineSpacing = options.lineSpacing || 0;
             var imageData = getImageData();
             var data = imageData.data;
 
@@ -143,15 +144,100 @@ var GlitchFX = (function() {
          * @param  {function} callback
          */
         filters.ghost = function(options, callback) {
-            var xShift = options['x-offset'] || 30;
-            var yShift = options['y-offset'] || 10;
-            var alpha = options.alpha || 0.4;
+            var xShift = options['x-offset'] || 0;
+            var yShift = options['y-offset'] || 0;
+            var alpha = options.alpha ||  0;
 
             ctx.globalAlpha = alpha;
             ctx.globalCompositeOperation = options.composite || 'multiply';
             ctx.drawImage(canvas, xShift, yShift, width, height);
             ctx.globalCompositeOperation = 'source-over';
             ctx.globalAlpha = 1;
+            callback();
+        };
+
+
+        /**
+         * Dithering.
+         * Origin source: https://github.com/meemoo/iframework/blob/gh-pages/src/nodes/image-monochrome-worker.js
+         *
+         * @param  {object}   options
+         * @param  {function} callback
+         */
+        filters.dithering = function(options, callback) {
+            var bayerThresholdMap = [
+              [  15, 135,  45, 165 ],
+              [ 195,  75, 225, 105  ],
+              [  60, 180,  30, 150 ],
+              [ 240, 120, 210,  90 ]
+            ];
+
+            var lumR = [];
+            var lumG = [];
+            var lumB = [];
+
+            for (var i=0; i<256; i++) {
+              lumR[i] = i*0.299;
+              lumG[i] = i*0.587;
+              lumB[i] = i*0.114;
+            }
+
+            var threshold = options.threshold || 0;
+            var type = options.type || false;
+            var isMonochrome = options.monochrome || false;
+            var imageData = getImageData();
+            var imageDataLength = imageData.data.length;
+
+
+            // Greyscale luminance (sets r pixels to luminance of rgb)
+            for (var i = 0; i <= imageDataLength; i += 4) {
+                imageData.data[i] = Math.floor(lumR[imageData.data[i]] + lumG[imageData.data[i+1]] + lumB[imageData.data[i+2]]);
+            }
+
+            var w = imageData.width;
+            var newPixel, err;
+            var pixelIncrement = (isMonochrome) ? 4 : 1;
+            for (var currentPixel = 0; currentPixel <= imageDataLength; currentPixel+=pixelIncrement) {
+                if (type === "none") {
+                  // No dithering
+                  imageData.data[currentPixel] = imageData.data[currentPixel] < threshold ? 0 : 255;
+                } else if (type === "bayer") {
+                  // 4x4 Bayer ordered dithering algorithm
+                  var x = Math.floor(currentPixel/4 % w);
+                  var y = Math.floor(currentPixel/4 / w);
+                  var map = Math.floor( (imageData.data[currentPixel] + bayerThresholdMap[x%4][y%4]) / 2 );
+                  imageData.data[currentPixel] = (map < threshold) ? 0 : 255;
+                } else if (type === "floydsteinberg") {
+                  // Floyd–Steinberg dithering algorithm
+                  newPixel = imageData.data[currentPixel] < 129 ? 0 : 255;
+                  err = Math.floor((imageData.data[currentPixel] - newPixel) / 16);
+                  imageData.data[currentPixel] = newPixel;
+
+                  imageData.data[currentPixel       + 4 ] += err*7;
+                  imageData.data[currentPixel + 4*w - 4 ] += err*3;
+                  imageData.data[currentPixel + 4*w     ] += err*5;
+                  imageData.data[currentPixel + 4*w + 4 ] += err*1;
+                } else {
+                  // Bill Atkinson's dithering algorithm
+                  newPixel = imageData.data[currentPixel] < 129 ? 0 : 255;
+                  err = Math.floor((imageData.data[currentPixel] - newPixel) / 8);
+                  imageData.data[currentPixel] = newPixel;
+
+                  imageData.data[currentPixel       + 4 ] += err;
+                  imageData.data[currentPixel       + 8 ] += err;
+                  imageData.data[currentPixel + 4*w - 4 ] += err;
+                  imageData.data[currentPixel + 4*w     ] += err;
+                  imageData.data[currentPixel + 4*w + 4 ] += err;
+                  imageData.data[currentPixel + 8*w     ] += err;
+                }
+
+                // Set g and b pixels equal to r
+                if (isMonochrome) {
+                    imageData.data[currentPixel + 1] = imageData.data[currentPixel + 2] = imageData.data[currentPixel];
+                }
+            }
+
+            ctx.putImageData(imageData, 0, 0);
             callback();
         };
 
@@ -228,9 +314,9 @@ var GlitchFX = (function() {
          * @param  {function} callback
          */
         filters.tint = function(options, callback) {
-            var red = options.red || 200;
-            var green = options.green || 180;
-            var blue = options.blue || 220;
+            var red = options.red || 0;
+            var green = options.green || 0;
+            var blue = options.blue || 0;
             var imageData = getImageData();
             var data = imageData.data;
 
@@ -857,3 +943,4 @@ var GlitchFX = (function() {
         };
     };
 }());
+
