@@ -203,6 +203,14 @@ app.filterData = new FilterData([
         'min': 1,
         'max': 1000,
         'step': 1
+      },
+      {
+        'name': 'colour',
+        'type':'range',
+        'value': 150,
+        'min': 0,
+        'max': 255,
+        'step': 1
       }
 
     ]
@@ -328,16 +336,16 @@ app.filterData = new FilterData([
         'name': 'x-offset',
         'type':'range',
         'value': 20,
-        'min': -1000,
-        'max': 1000,
+        'min': -400,
+        'max': 400,
         'step': 1
       },
       {
         'name': 'y-offset',
         'type':'range',
         'value': 0,
-        'min': -1000,
-        'max': 1000,
+        'min': -400,
+        'max': 400,
         'step': 1
       },
       {
@@ -368,7 +376,7 @@ app.filterData = new FilterData([
           { 'name': 'luminosity', 'value': 'luminosity'},
           { 'name': 'normal', 'value': 'source-over'}
         ],
-        'value': 'multiply'
+        'value': 'overlay'
       },
       {
         'name': 'negative',

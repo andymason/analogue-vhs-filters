@@ -7,9 +7,11 @@ Uses navative JavaScript without WebGL so is CPU intensive and slow.
 
 TO DO
 -----
+* Proper export settings
+* Import settings
 * Update ghosting effect to be more realistic
 * Fix bend doing RGB shifts
-* Progress bar
+* Progress bar. Needed for large renders (1920x1080)
 * Scale effects relative to canvas size, not pixel width
 * Image layer with composite effects
 * Web cam import

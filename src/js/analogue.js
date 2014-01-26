@@ -33,6 +33,11 @@ var GlitchFX = (function() {
         var width = canvas.width;
         var height = canvas.height;
         var startImg = _startImg;
+        var sandboxCanvas = document.createElement('canvas');
+        var sandboxCtx = sandboxCanvas.getContext('2d');
+        sandboxCanvas.width = width;
+        sandboxCanvas.height = height;
+
 
         function getImageData() {
             return ctx.getImageData(0, 0, width, height);
@@ -147,10 +152,27 @@ var GlitchFX = (function() {
             var xShift = options['x-offset'] || 0;
             var yShift = options['y-offset'] || 0;
             var alpha = options.alpha ||  0;
+            var invert = options.negative;
+            var source = canvas;
+
+
+            if (invert) {
+              var imageData = ctx.getImageData(0, 0, width, height);
+              var data = imageData.data;
+
+              for (var i = 0; i < data.length; i += 4) {
+                  data[i] = 255 - data[i];
+                  data[i + 1] = 255 - data[i+1];
+                  data[i + 2] = 255 - data[i+2];
+              }
+
+              sandboxCtx.putImageData(imageData, 0, 0);
+              source = sandboxCanvas;
+            }
 
             ctx.globalAlpha = alpha;
             ctx.globalCompositeOperation = options.composite || 'multiply';
-            ctx.drawImage(canvas, xShift, yShift, width, height);
+            ctx.drawImage(source, xShift, yShift);
             ctx.globalCompositeOperation = 'source-over';
             ctx.globalAlpha = 1;
             callback();
@@ -451,22 +473,24 @@ var GlitchFX = (function() {
 
 
         /**
-         * Horizontal brightness line.
+         * Horizontal line.
          * @param  {options}   options
          * @param  {function}  callback
          */
         filters.brightnessLines = function(options, callback) {
-            var barAlpha  = options.alpha || 0.5;
-            var barYPos   = options.yPos || 200;
-            var barHeight = options.height || 100;
+            var barAlpha  = options.alpha || 0;
+            var barYPos   = options.yPos || 0;
+            var barHeight = options.height || 0;
+            var barColour = options.colour || 0;
 
-            ctx.globalCompositeOperation = 'lighter';
+            ctx.globalCompositeOperation = 'overlay';
 
+            var rgba = 'rgba('+barColour+','+barColour+','+barColour+',';
             var linGrad = ctx.createLinearGradient(width/2, barYPos, width/2, barYPos + barHeight);
-            linGrad.addColorStop(0, 'rgba(255, 255, 255, 0)');
-            linGrad.addColorStop(0.07, 'rgba(255, 255, 255, ' + barAlpha + ')');
-            linGrad.addColorStop(0.93, 'rgba(255, 255, 255, ' + barAlpha + ')');
-            linGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            linGrad.addColorStop(0, rgba+'0)');
+            linGrad.addColorStop(0.07, rgba + barAlpha + ')');
+            linGrad.addColorStop(0.93, rgba + barAlpha + ')');
+            linGrad.addColorStop(1, rgba+'0)');
 
             ctx.fillStyle = linGrad;
             ctx.fillRect(0, barYPos, width, barYPos + barHeight);
@@ -943,4 +967,5 @@ var GlitchFX = (function() {
         };
     };
 }());
+
 

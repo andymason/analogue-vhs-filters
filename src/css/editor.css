@@ -23,6 +23,24 @@ input, button, select, option {
   font-size: 9px;
 }
 
+#title {
+  margin: 10px 0;
+  font-weight: normal;
+  font-size: 24px;
+}
+
+#title span {
+  font-size: 9px;
+  margin-left: -9px;
+  display: inline-block;
+}
+
+#editor {
+  width: 960px;
+  margin: 0 auto;
+  overflow: auto;
+}
+
 /* Desperate to remove focus outline in firefox */
 ::-moz-focus-inner {
   outline:0;
@@ -70,6 +88,19 @@ input[type="range"]:focus {
   /* -webkit-appearance: none; */
 }
 
+input[type="range"]::-webkit-slider-thumb {
+   -webkit-appearance:none !important;
+   width:25px;
+   height:10px;
+   -webkit-appearance: none;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -wekkit-border-radius: 8px;
+    border:1px solid black;
+
+    background: blue;
+}
+
 
 .input-range::-moz-range-thumb {
   cursor: pointer;
@@ -89,6 +120,23 @@ input[type="range"]:focus {
   outline:0;
 }
 
+#local_image {
+  max-width: 120px;
+}
+
+#source_wrapper {
+  float: left;
+  margin-right: 10px;
+}
+
+#source_wrapper p {
+  margin: 0;
+}
+
+#local_image {
+  display: none;
+}
+
 
 .noscript {
   padding: 1rem;
@@ -97,9 +145,8 @@ input[type="range"]:focus {
   background-color: #c40000;
 }
 
-#output,
-#source_image {
-  border: 2px solid #222;
+.source_image {
+  cursor: pointer;
 }
 
 .output_wrapper {
@@ -109,6 +156,8 @@ input[type="range"]:focus {
 
 .col1 {
   float: left;
+  width: 470px;
+  margin-left: 10px;
 }
 
 .source_wrapper {
@@ -121,30 +170,46 @@ input[type="range"]:focus {
 }
 
 .filter_selection {
-  /* float: left;*/
+   float: left;
 }
 
-.active_filters {
-  background: #333;
-  border: 1px solid #222;
-  padding: 0.4rem;
+.filter_selection p {
+  margin: 0 0 6px 0;
+}
+
+.filter_selection label {
+  display: inline-block;
+  width: 50px;
+}
+
+#active_filters {
+  clear: both;
+  padding-top: 10px;
+}
+
+#active_filters > p {
+  margin: 0;
+  font-weight: bold;
 }
 
 
 .filter {
-  border: 1px solid #333;
-  background: #222;
+  border: 1px solid #232323;
+  background: #232323;
   position: relative;
   overflow: hidden;
-  padding-left: 20px;
+  padding-left: 6px;
   padding-right: 20px;
   margin: 1px 0 1px 0;
   cursor: pointer;
 }
 
+.filter.closed {
+  background-color: #1A1A1A;
+}
 
 .filter.closed:hover {
-  background: #999;
+  border-color: #979797;
 }
 
 .filter.closed .inputs_wrapper {
@@ -216,4 +281,9 @@ input[type="range"]:focus {
 .move_disabled {
   color: #888;
   cursor: default;
+}
+
+
+.output_contols {
+  margin-top: 10px;
 }

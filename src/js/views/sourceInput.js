@@ -2,19 +2,19 @@ var app = app || {};
 
 app.SourceInput = Backbone.View.extend({
 
-  el: '#sourceWrapper',
+  el: '#source_wrapper',
 
   model: app.Input,
 
   initialize: function() {
-    this.$sourceUrl = this.$('.source_input');
+    //this.$sourceUrl = this.$('.source_input');
     this.$sourceImg = this.$('.source_image');
 
-    this.model.on('change', this.updateImage, this);
+    //this.model.on('change', this.updateImage, this);
   },
 
   events: {
-    'click .source_update': 'updateSource',
+    //'click .source_update': 'updateSource',
     'change #local_image': 'handleLocalImage'
   },
 
