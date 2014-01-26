@@ -34,7 +34,6 @@ var FilterCollectionView = Backbone.View.extend({
     this.collection.add(model, {at: position});
 
     //this.updateOutput();
-    console.log('in here');
   },
 
   addFilterViewItem: function(model, collection, options) {
@@ -55,29 +54,10 @@ var FilterCollectionView = Backbone.View.extend({
   },
 
   updateOutput: function(m, options) {
-    analogue.drawImage();
-
-
-    var filters = [];
-    console.log('update output');
-    this.collection.each(function(model) {
-      //model.triggerOutput(analogue);
-      var filter = {
-        name: model.get('name'),
-        options: {}
-      };
-
-      model.get('options').forEach(function(option) {
-        filter.options[option.name] = option.value;
-      });
-
-      filters.push(filter);
-
-    });
-
-    console.log(filters);
-
-    glitchFX(filters, function() { console.log('finished'); });
+    glitchFX.applyFilters(
+      this.collection.getFilters(),
+      function() { console.log('finished'); }
+    );
   },
 
   renderOutput: function(m, options) {
@@ -88,19 +68,18 @@ var FilterCollectionView = Backbone.View.extend({
 
     var destination = $('#destination').val();
 
-    var tmpDraw = new Analogue(tmpCanvas, img);
-    tmpDraw.drawImage();
-    this.collection.each(function(model) {
-      model.triggerOutput(tmpDraw);
-    });
+    var tmpDraw = new GlitchFX(tmpCanvas, img);
 
+    tmpDraw.applyFilters(
+      this.collection.getFilters(),
+      function() { console.log('finished'); }
+    );
     var dataURL = tmpCanvas.toDataURL('image/jpg');
 
     if (destination === 'imgur')
       this.imgurUpload(dataURL);
     else
       window.open(dataURL);
-
   },
 
   imgurUpload: function(_dataURL) {

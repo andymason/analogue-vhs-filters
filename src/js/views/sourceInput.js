@@ -26,7 +26,7 @@ app.SourceInput = Backbone.View.extend({
     var reader = new FileReader();
     reader.onload = function(event){
         img.onload = function(event) {
-          analogue.updateImage(this);
+          glitchFX.setImage(this);
           app.FilterCollectionView.updateOutput();
         }
         img.src = event.target.result;
@@ -37,8 +37,8 @@ app.SourceInput = Backbone.View.extend({
 
   updateImage: function() {
     var photo = new Image();
-    photo.addEventListener('load', function() {;
-      analogue.updateImage(this);
+    photo.addEventListener('load', function() {
+      glitchFX.setImage(this);
       app.FilterCollectionView.updateOutput();
 
     }, false);

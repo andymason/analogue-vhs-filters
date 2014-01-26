@@ -1,17 +1,17 @@
 {
-  "bitwise"       : true,     
-  "curly"         : false,     
-  "eqeqeq"        : true,     
-  "forin"         : true,     
-  "immed"         : true,     
-  "latedef"       : true,     
-  "newcap"        : true,     
-  "noarg"         : true,     
-  "noempty"       : true,     
-  "nonew"         : true,     
-  "plusplus"      : false,     
-  "regexp"        : true,     
-  "undef"         : true,     
+  "bitwise"       : true,
+  "curly"         : false,
+  "eqeqeq"        : true,
+  "forin"         : true,
+  "immed"         : true,
+  "latedef"       : true,
+  "newcap"        : true,
+  "noarg"         : true,
+  "noempty"       : true,
+  "nonew"         : true,
+  "plusplus"      : false,
+  "regexp"        : true,
+  "undef"         : true,
   "strict"        : false,
   "trailing"      : true,
 
@@ -21,7 +21,5 @@
   "globals": {
     "_": true,
     "Backbone": true
-  },
-
-  "indent"        : 4
+  }
 }

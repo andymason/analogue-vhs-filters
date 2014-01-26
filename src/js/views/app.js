@@ -2,8 +2,8 @@ var app = app || {};
 
 var img = document.querySelector('#sourceImage');
 var canvas = document.querySelector('#output');
-var analogue = new Analogue(canvas, img);
-analogue.drawImage();
+//var analogue = new Analogue(canvas, img);
+//analogue.drawImage();
 
 
 var glitchFX = new GlitchFX(canvas, img);

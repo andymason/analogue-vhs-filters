@@ -5,14 +5,16 @@ Create glitched and distorted images by manipulating canvas data array.
 Uses navative JavaScript without WebGL so is CPU intensive and slow.
 
 
-Feature wish list
+TO DO
 -----------------
-
+* Fix bend doing RGB shifts
 * Effect callbacks
 * Progress bar
+* Scale effects relative to canvas size, not pixel width
 * Image layer with conposite effects
 * Web cam import
 * Tilt shift blur
+* Normalise variable names
 * Import image from URL (needs base64 image proxy. Use GAE?)
 * Full credits
 

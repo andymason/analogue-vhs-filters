@@ -16,6 +16,25 @@ app.filterCollection = Backbone.Collection.extend({
       this.remove(model, {silent: true}); // silence this to stop excess event triggers
       this.add(model, {at: index+1});
     }
+  },
+
+  getFilters: function() {
+     return this.map(function(model) {
+      var filter = {
+        name: model.get('name'),
+        options: {}
+      };
+
+      var options = model.get('options');
+
+      if (options) {
+        model.get('options').forEach(function(option) {
+          filter.options[option.name] = option.value;
+        });
+      }
+
+      return filter;
+    });
   }
 
 });

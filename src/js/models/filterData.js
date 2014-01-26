@@ -167,7 +167,7 @@ app.filterData = new FilterData([
     'name': 'stutter',
     'options': [
       {
-        'name': 'stutter',
+        'name': 'amount',
         'type':'range',
         'value': 2,
         'min': 0,
@@ -318,6 +318,29 @@ app.filterData = new FilterData([
         'step': 0.01
       },
       {
+        'name': 'composite',
+        'type':'select',
+        'options': [
+          { 'name': 'multiply', 'value': 'multiply'},
+          { 'name': 'screen', 'value': 'screen'},
+          { 'name': 'overlay', 'value': 'overlay'},
+          { 'name': 'darken', 'value': 'darken'},
+          { 'name': 'lighten', 'value': 'lighten'},
+          { 'name': 'color-dodge', 'value': 'color-dodge'},
+          { 'name': 'color-burn', 'value': 'color-burn'},
+          { 'name': 'hard-light', 'value': 'hard-light'},
+          { 'name': 'soft-light', 'value': 'soft-light'},
+          { 'name': 'difference', 'value': 'difference'},
+          { 'name': 'exclusion', 'value': 'exclusion'},
+          { 'name': 'hue', 'value': 'hue'},
+          { 'name': 'saturation', 'value': 'saturation'},
+          { 'name': 'color', 'value': 'color'},
+          { 'name': 'luminosity', 'value': 'luminosity'},
+          { 'name': 'normal', 'value': 'source-over'}
+        ],
+        'value': 'multiply'
+      },
+      {
         'name': 'negative',
         'type':'checkbox',
         'value': true
@@ -405,17 +428,28 @@ app.filterData = new FilterData([
     'name': 'rgbShift',
     'options': [
       {
-        'name': 'distance',
+        'name': 'red',
         'type':'range',
-        'value': 2,
+        'value': 5,
         'min': 0,
-        'max': 10,
-        'step': 0.1
+        'max': 100,
+        'step': 1
       },
       {
-        'name': 'interlaced',
-        'type':'checkbox',
-        'value': false
+        'name': 'green',
+        'type':'range',
+        'value': 5,
+        'min': 0,
+        'max': 100,
+        'step': 1
+      },
+      {
+        'name': 'blue',
+        'type':'range',
+        'value': 0,
+        'min': 0,
+        'max': 100,
+        'step': 1
       }
     ]
   },
@@ -465,7 +499,7 @@ app.filterData = new FilterData([
     'name': 'bend',
     'options': [
       {
-        'name': 'bend_amount',
+        'name': 'amount',
         'type':'range',
         'value': 10,
         'max': 1000,
@@ -475,18 +509,18 @@ app.filterData = new FilterData([
         'name': 'frequency',
         'type':'range',
         'value': 0,
-        'max': 100,
+        'max': 20,
         'step': 1
       },
       {
-        'name': 'x-offset',
+        'name': 'x',
         'type':'range',
         'value': 0,
         'max': 1000,
         'step': 1
       },
       {
-        'name': 'y-offset',
+        'name': 'y',
         'type':'range',
         'value': 0,
         'min': -1000,

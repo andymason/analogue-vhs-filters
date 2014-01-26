@@ -16,12 +16,58 @@ app.exampleCombinations = {
       { 'name': 'brightness', 'options': { 'brightness': -50 } },
       { 'name': 'contrast', 'options': { 'contrast': 40 } },
       { 'name': 'colourBanding', 'options': { 'amount': 0.03 , 'bandCount': 30 } },
-      { 'name': 'upScale', 'options': { 'upScale': 2.5 } },
+      { 'name': 'downsample', 'options': { 'amount': 2.5 } },
       { 'name': 'bend', 'options': { 'bend_amount': 10, 'frequency': 1, 'x-offset':  0, 'y-offset': 50 } },
       { 'name': 'tint', 'options': { 'red': -20, 'green':  -5, 'blue': 10 } },
       { 'name': 'scanlines', 'options': { 'brightness': 10, 'lineSpacing': 3 } },
       { 'name': 'brightnessLines', 'options': { 'alpha': 0.2, 'yPos': 50, 'height': 120 } }
     ]
+  },
+
+  'psychedelic': {
+    "title": "psychedelic",
+    "filters": [{
+      "name": "rgbShift",
+      "options": {
+        "red": 36,
+        "green": 0,
+        "blue": 20
+      }
+    }, {
+      "name": "border",
+      "options": {
+        "thickness": 33,
+        "colour": "#000000"
+      }
+    }, {
+      "name": "jpegCorrupt",
+      "options": {
+        "amount": 5,
+        "quality": 85,
+        "iterations": 6
+      }
+    }, {
+      "name": "tint",
+      "options": {
+        "red": 119,
+        "green": 6,
+        "blue": 58
+      }
+    }, {
+      "name": "vignette",
+      "options": {
+        "alpha": 0.61,
+        "size": 0.1
+      }
+    }, {
+      "name": "leds",
+      "options": {
+        "type": 3,
+        "scale": 1,
+        "composite": "multiply",
+        "opacity": 0.6
+      }
+    }]
   },
 
   '3d_blues': {
@@ -141,9 +187,9 @@ app.exampleCombinations = {
         }
       },
       {
-        "name": "upScale",
+        "name": "downsample",
         "options": {
-          "upScale": 2.5
+          "amount": 2.5
         }
       },
       {
