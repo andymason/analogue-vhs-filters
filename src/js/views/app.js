@@ -72,20 +72,7 @@ app.AppView = Backbone.View.extend({
   },
 
   exportSettings: function() {
-    var settings = {
-      'title' : 'Exported settings',
-      'filters': []
-    };
-    app.FilterCollection.each(function(model) {
-      var settingOption = { name: model.get('name'), options: {} };
-      model.get('options').forEach(function(option) {
-        settingOption.options[option.name] = option.value;
-      });
-
-      settings.filters.push(settingOption);
-    });
-
-    console.log(JSON.stringify(settings, null, '  '));
+    app.exportView.render();
   },
 
   insertFilter: function(filterName, options, preventViewUpdate) {

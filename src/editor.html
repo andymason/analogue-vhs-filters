@@ -39,8 +39,6 @@
             <option value="1920x1080">1920x1080</option>
           </select>
           <button id="render">Render</button>
-
-          <button id="export_settings">export_settings</button>
       </div>
     </div>
 
@@ -70,6 +68,7 @@
           <label>Configs</label>
             <select id="filter_examples"></select>
             <button id="filter_example_load">Load</button>
+            <button id="export_settings">Import / Export</button>
             <button id="filter_clear">Clear all</button>
         </p>
       </div>
@@ -79,6 +78,16 @@
           <p>Active filters</p>
       </div>
 
+    </div>
+  </div>
+
+
+  <div id="settings_output_container">
+    <div id="settings_output_inner">
+      <h2>Settings output</h2>
+      <span class="close">x</span>
+      <textarea id="settings_output"></textarea>
+      <button class="import">Import</button>
     </div>
   </div>
 
@@ -134,6 +143,7 @@
   <script src="js/collections/filter.js"></script>
   <script src="js/views/filterItem.js"></script>
   <script src="js/views/filters.js"></script>
+  <script src="js/views/export_settings.js"></script>
   <script src="js/views/sourceInput.js"></script>
   <script src="js/views/app.js"></script>
   <script src="js/app.js"></script>
