@@ -13,6 +13,7 @@ var GlitchFX = (function() {
         'img/tiles/scanrez2.png'
     ];
 
+
     // Load and store images
     ledImages = ledImages.map(function(imgPath) {
         var img = new Image();
@@ -25,7 +26,6 @@ var GlitchFX = (function() {
         if (val > 255) return 255;
         return val;
     }
-
 
     return function(_canvas, _startImg) {
         var canvas = _canvas;
@@ -48,6 +48,12 @@ var GlitchFX = (function() {
         }
 
         drawImage();
+
+        function setImageSmoothing(ctx, status) {
+            ctx.imageSmoothingEnabled = status;
+            ctx.mozImageSmoothingEnabled = status;
+            ctx.webkitImageSmoothingEnabled = status;
+        }
 
         var filters = {};
 
@@ -572,13 +578,11 @@ var GlitchFX = (function() {
          * @param  {function} callback
          */
         filters.bend = function(options, callback) {
-            console.log(options);
-            //imgData, amount, freq, x, y
             var imageData = getImageData();
             var data      = imageData.data;
             var frequency = (height/ Math.PI) / (options.frequency || 1);
             var amp       = options.amount || 0;
-            var xOffset   = options.x || 0;
+            var xOffset   = Math.round(options.x) * 4 || 0;
             var yOffset   = options.y || 0;
 
             for (var i = 0; i < height; i++) {
@@ -937,12 +941,18 @@ var GlitchFX = (function() {
         };
 
 
-        function applyFilters(filterCollection, callback) {
+        function applyFilters(filterCollection, finalCallback, progressCallback) {
             drawImage();
+            var filterCount = filterCollection.length;
+            var singlePercent = filterCount * 0.01;
 
             function loopFilters() {
+                if (progressCallback) {
+                    progressCallback(100 - filterCollection.length / singlePercent);
+                }
+
                 if (filterCollection.length === 0)
-                    return callback();
+                    return finalCallback();
 
                 var filterOpt = filterCollection.shift();
                 filterOpt.options = filterOpt.options || {};

@@ -2,16 +2,16 @@ Analogue VHS Filters
 ====================
 
 Create glitched and distorted images by manipulating canvas data array.
-Uses navative JavaScript without WebGL so is CPU intensive and slow.
+Uses native JavaScript without WebGL so is CPU intensive and slow.
 
 
 TO DO
 -----
-* Clean-up export/import code
-* Fix bend doing RGB shifts
 * Progress bar. Needed for large renders (1920x1080)
+* Add more example configs
 * Scale effects relative to canvas size, not pixel width
 * Image layer with composite effects
+* Save filter setting locally
 * Web cam import
 * Tilt shift blur
 * Normalise variable names
@@ -21,6 +21,8 @@ TO DO
 
 Done list
 ---------
+* Fix bend doing RGB shifts
+* Clean-up export/import code
 * Proper export settings
 * Update ghosting effect to be more realistic
 * Import settings

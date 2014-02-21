@@ -17,6 +17,9 @@ var FilterCollectionView = Backbone.View.extend({
     //this.collection.on('change', this.updateOutput, this);
     this.collection.on('render', this.renderOutput, this);
     this.collection.on('reset', this.empty, this);
+
+    this.$progressWrapper = $('#progress_bar_wrapper');
+    this.$progressBar = $('#progress_bar');
   },
 
   updateSort: function(event, model, position) {
@@ -53,10 +56,22 @@ var FilterCollectionView = Backbone.View.extend({
     }
   },
 
+  updateProgressBar: function(percentComplete) {
+    console.log(percentComplete, this.$progressBar);
+    this.$progressBar.css('width', percentComplete + '%');
+    if (percentComplete === 100) {
+      //this.$progressWrapper.hide();
+    }
+  },
+
   updateOutput: function(m, options) {
+    console.log(this.$progressWrapper);
+    this.$progressWrapper.show();
+
     glitchFX.applyFilters(
       this.collection.getFilters(),
-      function() { console.log('finished'); }
+      function() { console.log('finished'); },
+      this.updateProgressBar.bind(this)
     );
   },
 
@@ -67,19 +82,22 @@ var FilterCollectionView = Backbone.View.extend({
     tmpCanvas.height = parseInt(resolution[1], 10);
 
     var destination = $('#destination').val();
-
     var tmpDraw = new GlitchFX(tmpCanvas, img);
+
+    this.$progressWrapper.show();
 
     tmpDraw.applyFilters(
       this.collection.getFilters(),
-      function() { console.log('finished'); }
+      function() {
+          var dataURL = tmpCanvas.toDataURL('image/jpg');
+          if (destination === 'imgur')
+            this.imgurUpload(dataURL);
+          else
+            window.open(dataURL);
+      }.bind(this),
+      this.updateProgressBar.bind(this)
     );
-    var dataURL = tmpCanvas.toDataURL('image/jpg');
 
-    if (destination === 'imgur')
-      this.imgurUpload(dataURL);
-    else
-      window.open(dataURL);
   },
 
   imgurUpload: function(_dataURL) {

@@ -342,3 +342,29 @@ input[type="range"]::-webkit-slider-thumb {
 #settings_output::-moz-selection {
   background: #333;
 }
+
+
+
+
+#canvas_wrapper {
+  position: relative;
+}
+
+#progress_bar_wrapper {
+  display: none;
+  position: absolute;
+  top: 50%;
+  height: 8px;
+  margin-top: -10px;
+  width: 80%;
+  left: 10%;
+  background: #000;
+  border: 1px solid #FFF;
+  padding: 1px;
+}
+
+#progress_bar {
+  width: 50%;
+  background: #FFF;
+  height: 100%;
+}

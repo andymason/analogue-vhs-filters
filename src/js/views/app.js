@@ -94,9 +94,6 @@ app.AppView = Backbone.View.extend({
     }
 
     app.FilterCollection.add( model, { preventViewUpdate: preventViewUpdate } );
-
-//    var view = new app.FilterItemView({ model: model });
-//    this.$activeFilters.append(view.render().el);
   },
 
   renderFilters: function() {
@@ -111,8 +108,6 @@ app.AppView = Backbone.View.extend({
             ui.item.trigger('drop', ui.item.index());
         }
     });
-
-
   }
 
 });
