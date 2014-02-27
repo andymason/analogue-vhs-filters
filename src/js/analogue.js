@@ -958,7 +958,9 @@ var GlitchFX = (function() {
                 filterOpt.options = filterOpt.options || {};
 
                 if (filterOpt.name in filters) {
-                    filters[filterOpt.name](filterOpt.options, loopFilters);
+                    setTimeout(function() {
+                      filters[filterOpt.name](filterOpt.options, loopFilters);
+                    }, 0);
                 } else {
                     loopFilters();
                 }

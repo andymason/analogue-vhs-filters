@@ -8,8 +8,9 @@ Uses native JavaScript without WebGL so is CPU intensive and slow.
 TO DO
 -----
 * Progress bar. Needed for large renders (1920x1080)
-* Add more example configs
 * Scale effects relative to canvas size, not pixel width
+* Render large image to data uri crashes browser
+* Add more example configs
 * Image layer with composite effects
 * Save filter setting locally
 * Web cam import

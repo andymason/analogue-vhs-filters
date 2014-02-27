@@ -57,15 +57,13 @@ var FilterCollectionView = Backbone.View.extend({
   },
 
   updateProgressBar: function(percentComplete) {
-    console.log(percentComplete, this.$progressBar);
     this.$progressBar.css('width', percentComplete + '%');
     if (percentComplete === 100) {
-      //this.$progressWrapper.hide();
+      this.$progressWrapper.hide();
     }
   },
 
   updateOutput: function(m, options) {
-    console.log(this.$progressWrapper);
     this.$progressWrapper.show();
 
     glitchFX.applyFilters(
