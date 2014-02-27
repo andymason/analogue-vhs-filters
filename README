@@ -7,7 +7,6 @@ Uses native JavaScript without WebGL so is CPU intensive and slow.
 
 TO DO
 -----
-* Progress bar. Needed for large renders (1920x1080)
 * Scale effects relative to canvas size, not pixel width
 * Render large image to data uri crashes browser
 * Add more example configs
@@ -22,6 +21,7 @@ TO DO
 
 Done list
 ---------
+* Progress bar. Needed for large renders (1920x1080)
 * Fix bend doing RGB shifts
 * Clean-up export/import code
 * Proper export settings

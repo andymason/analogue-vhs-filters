@@ -948,7 +948,8 @@ var GlitchFX = (function() {
 
             function loopFilters() {
                 if (progressCallback) {
-                    progressCallback(100 - filterCollection.length / singlePercent);
+                    var percent = 100 - filterCollection.length / singlePercent;
+                    progressCallback((isNaN(percent)) ? 100 : percent);
                 }
 
                 if (filterCollection.length === 0)
