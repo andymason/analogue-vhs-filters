@@ -974,9 +974,22 @@ var GlitchFX = (function() {
             startImg = img || startImg;
         }
 
+
+        /**
+         * Update canvas width and height
+         * @param  {object} options { width: x, height: x }
+         */
+        function updateDimensions(options) {
+          width = (options.width) ? options.width : width;
+          height = (options.height) ? options.height : height;
+          sandboxCanvas.width = width;
+          sandboxCanvas.height = height;
+        }
+
         return {
             applyFilters: applyFilters,
-            setImage: setImage
+            setImage: setImage,
+            updateDimensions: updateDimensions
         };
     };
 }());

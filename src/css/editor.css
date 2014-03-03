@@ -153,6 +153,10 @@ input[type="range"]::-webkit-slider-thumb {
   float: left;
 }
 
+#output {
+  max-width: 480px;
+}
+
 
 .col1 {
   float: left;

@@ -17,6 +17,8 @@ app.AppView = Backbone.View.extend({
     this.$dropdown = this.$('#filter_selection_dropdown');
     this.$exampleDropdown= this.$('#filter_examples');
     this.$activeFilters = this.$('#active_filters');
+    this.$resolutionChoice = this.$('#resolution');
+    this.$canvas = this.$('#output');
 
     app.filterData.each(this.addSelectOptions, this);
     _.each(app.exampleCombinations, this.addExampleOption, this);
@@ -29,7 +31,8 @@ app.AppView = Backbone.View.extend({
     'click #filter_example_load'  : 'addExample',
     'click #filter_clear'         : 'clearFilters',
     'click #render'               : 'renderFilters',
-    'click #export_settings'      : 'exportSettings'
+    'click #export_settings'      : 'exportSettings',
+    'change #resolution'          : 'updateOutputView'
   },
 
   addExampleOption: function(example, exampleID) {
@@ -94,6 +97,20 @@ app.AppView = Backbone.View.extend({
     }
 
     app.FilterCollection.add( model, { preventViewUpdate: preventViewUpdate } );
+  },
+
+  updateOutputView: function() {
+    var resolution = this.$resolutionChoice.val().split('x');
+    var width = resolution[0];
+    var height = resolution[1];
+    this.$canvas.attr('width', width);
+    this.$canvas.attr('height', height);
+    glitchFX.updateDimensions({
+      width: width,
+      height: height
+    });
+
+    app.FilterCollectionView.updateOutput();
   },
 
   renderFilters: function() {
