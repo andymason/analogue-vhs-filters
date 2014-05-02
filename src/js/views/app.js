@@ -101,8 +101,8 @@ app.AppView = Backbone.View.extend({
 
   updateOutputView: function() {
     var resolution = this.$resolutionChoice.val().split('x');
-    var width = resolution[0];
-    var height = resolution[1];
+    var width = parseInt(resolution[0], 10);
+    var height = parseInt(resolution[1], 10);
     this.$canvas.attr('width', width);
     this.$canvas.attr('height', height);
     glitchFX.updateDimensions({

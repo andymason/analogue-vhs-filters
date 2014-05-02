@@ -43,8 +43,32 @@ var GlitchFX = (function() {
             return ctx.getImageData(0, 0, width, height);
         }
 
+        function getRealDimensions(_img) {
+          var img = new Image();
+          img.src = _img.src;
+          return {
+            width: img.width,
+            height: img.height
+          };
+        }
+
         function drawImage() {
-            ctx.drawImage(startImg, 0, 0, width, height);
+            var imgDimensions = getRealDimensions(startImg);
+            var outputAspect = width / height;
+            var imgAspect = imgDimensions.width / imgDimensions.height;
+            var outputWidth = width;
+            var outputHeight = height;
+
+            if (imgAspect > outputAspect) {
+              outputHeight = width  / imgAspect;
+            } else if (imgAspect < outputAspect) {
+              outputWidth = height * imgAspect;
+            }
+
+            var offsetX = (width - outputWidth > 0) ? (width - outputWidth) / 2 : 0;
+            var offsetY = (height - outputHeight > 0) ? (height - outputHeight) / 2 : 0;
+
+            ctx.drawImage(startImg, offsetX, offsetY, outputWidth, outputHeight);
         }
 
         drawImage();
