@@ -1,22 +1,164 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <style>
-    body {
-      background: #000;
-    }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
 
-    .hidden {
-      display: none;
-    }
-  </style>
+  <title>Editor</title>
+
+  <link type="text/css" rel="stylesheet" href="css/editor.css" />
+
 </head>
 <body>
 
-    <canvas id="screen" width="1280" height="720"></canvas>
-    <img src="img/test.jpg" id="source_image" width="640">
-    <img src="img/ghosting_ref.jpg">
+  <noscript>
+    <p class="noscript">Please enable JavaScript to use this application.</p>
+  </noscript>
 
-    <script src="js/analogue.js"></script>
-    <script src="js/test.js"></script>
-</body>
+  <div id="editor">
+    <h1 id="title ">Glitchor <span>v2</span></h1>
+    <div class="output_wrapper">
+      <div id="canvas_wrapper">
+        <canvas width="480" height="360" id="output"></canvas>
+
+        <div id="progress_bar_wrapper">
+          <div id="progress_bar"></div>
+        </div>
+      </div>
+
+
+      <div class="output_contols">
+          <select id="destination">
+            <option value="local">New window</option>
+            <option value="imgur">imgur upload</option>
+          </select>
+
+          <select id="resolution">
+            <option value="320x200">320x200 (C64)</option>
+            <option value="320x256">320x256 (Amiga PAL)</option>
+            <option value="320x512">320x512 (Amiga laced PAL)</option>
+            <option value="480x320" selected>480x320</option>
+            <option value="640x256">640x256 (Amiga High-res PAL)</option>
+            <option value="640x512">640x512 (Amiga High-res laced PAL)</option>
+            <option value="640x480">640x480</option>
+            <option value="800x600">800x600</option>
+            <option value="1024x768">1024x768</option>
+            <option value="1280x720">1080x720</option>
+            <option value="1920x1080">1920x1080</option>
+          </select>
+          <button id="render">Render</button>
+      </div>
+    </div>
+
+    <div class="col1">
+
+      <div id="source_wrapper">
+        <p>Source content</p>
+
+        <!-- <input type="text" class="source_input" value="img/test.jpg" /> -->
+        <label for="local_image">
+            <img id="sourceImage" class="source_image" alt="Source image" src="img/test.jpg" height="60" />
+          </label>
+        <input type="file" id="local_image" name="local_image" />
+        <!-- <button class="source_update">Update</button> -->
+      </div>
+
+
+      <div class="filter_selection">
+        <p>
+          <label>Filters</label>
+          <select id="filter_selection_dropdown"></select>
+          <button id="filter_selection_add">Add</button>
+
+        </p>
+
+        <p>
+          <label>Configs</label>
+            <select id="filter_examples"></select>
+            <button id="filter_example_load">Load</button>
+            <button id="export_settings">Import / Export</button>
+            <button id="filter_clear">Clear all</button>
+        </p>
+      </div>
+
+
+      <div id="active_filters">
+          <p>Active filters</p>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div id="settings_output_container">
+    <div id="settings_output_inner">
+      <h2>Settings output</h2>
+      <span class="close">x</span>
+      <textarea id="settings_output"></textarea>
+      <button class="import">Import</button>
+    </div>
+  </div>
+
+
+  <script type="text/template" id="template_input">
+      <!--
+      <div class="move">
+          <div class="move_button move_up" title="Move up">&#9650;</div>
+          <div class="move_button move_down" title="Move down">&#9660;</div>
+      </div>
+      -->
+      <p class="filter_name"><%= name %></p>
+      <div class="inputs_wrapper"></div>
+      <button class="remove" title="Remove filter"> &#10060;</button>
+  </script>
+
+  <script type="text/template" id="template_input_field">
+    <label class="filter_input">
+      <span class="option_name"><%= option.name %></span>
+
+      <% if (option.type === 'select') { %>
+          <select class="input" name="<%= option.name %>" type="select">
+          <% _.each(option.options, function(selOpt, i) { %>
+            <option value="<%= selOpt.value %>"><%= selOpt.name %></option>
+          <% }); %>
+          </select>
+      <% } else { %>
+        <input class="input input-<%= option.type %>"
+        <% _.each(option, function(value, key) { %>
+          <%= key %>="<%= value %>"
+          <% if (value === true) { %> checked <% } %>
+          <% }); %>
+        >
+      <% } %>
+    </label>
+  </script>
+
+  <script src="js/libs/jquery-2.0.3.min.js"></script>
+  <script src="js/libs/jquery-ui-1.10.3.custom.min.js"></script>
+  <script src="js/libs/underscore.js"></script>
+  <script src="js/libs/backbone.js"></script>
+  <script src="js/libs/deep-model.backbone.js"></script>
+
+  <script src="js/libs/glitch-canvas.js"></script>
+
+
+  <script src="js/analogue.js"></script>
+  <script src="js/models/filter.js"></script>
+  <script src="js/models/input.js"></script>
+  <script src="js/models/exampleCombinations.js"></script>
+  <script src="js/models/filterData.js"></script>
+
+  <script src="js/collections/filter.js"></script>
+  <script src="js/views/filterItem.js"></script>
+  <script src="js/views/filters.js"></script>
+  <script src="js/views/export_settings.js"></script>
+  <script src="js/views/sourceInput.js"></script>
+  <script src="js/views/app.js"></script>
+  <script src="js/app.js"></script>
+
+
+
+  <!--<script src="//localhost:35729/livereload.js"></script>-->
+  </body>
 </html>
+

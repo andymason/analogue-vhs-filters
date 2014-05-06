@@ -7,13 +7,13 @@ Uses native JavaScript without WebGL so is CPU intensive and slow.
 
 TO DO
 -----
+* Multiple input images processed in order 
+* Custom resolutions
 * Render large image to data uri crashes browser
-* Maintain image aspect ratio. Black borders.
 * Add more example configs
 * Image layer with composite effects
 * Save filter setting locally
 * Web cam import
-* Tilt shift blur
 * Normalise variable names
 * Import image from URL (needs base64 image proxy. Use GAE?)
 * Full credits
@@ -21,6 +21,7 @@ TO DO
 
 Done list
 ---------
+* Maintain image aspect ratio. Black borders.
 * Scale effects relative to canvas size, not pixel width
 * Progress bar. Needed for large renders (1920x1080)
 * Fix bend doing RGB shifts
@@ -41,6 +42,7 @@ Done list
 Not going to do
 ---------------
 * Mobile version
+* Tilt shift blur
 * WebGl optimised
 * Animated gif
 
