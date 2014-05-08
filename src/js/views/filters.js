@@ -56,6 +56,8 @@ var FilterCollectionView = Backbone.View.extend({
     }
   },
 
+  count: 1,
+
   updateProgressBar: function(percentComplete) {
     this.$progressBar.css('width', percentComplete + '%');
     if (percentComplete === 100) {
@@ -64,13 +66,24 @@ var FilterCollectionView = Backbone.View.extend({
   },
 
   updateOutput: function(m, options) {
-    this.$progressWrapper.show();
+    this.count = parseInt($('#iteration_count').val(), 10);
+    glitchFX.setImage(img);
+    this.runFilters(); 
+  },
 
-    glitchFX.applyFilters(
-      this.collection.getFilters(),
-      function() { console.log('finished'); },
-      this.updateProgressBar.bind(this)
-    );
+  runFilters: function() {
+    if (this.count > 0) {
+        this.count -= 1;
+        this.$progressWrapper.show();
+        glitchFX.applyFilters(
+            this.collection.getFilters(),
+            this.runFilters.bind(this),
+            this.updateProgressBar.bind(this)
+        );
+        glitchFX.setImage(canvas);
+    } else {
+        console.log('finished');   
+    }
   },
 
   renderOutput: function(m, options) {
