@@ -7,6 +7,7 @@ Uses native JavaScript without WebGL so is CPU intensive and slow.
 
 TO DO
 -----
+* Gameboy, gameboy camera, c64 modea
 * Multiple input images processed in order 
 * Custom resolutions
 * Render large image to data uri crashes browser
